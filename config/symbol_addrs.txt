@@ -4543,6 +4543,25 @@ IsSwVagPlaying__FP2SWPi                                           = 0x1DDA90; //
 SetSwDarken__FP2SWf                                               = 0x1DDAB8; // type:func
 SetSwDarkenSmooth__FP2SWf                                         = 0x1DDAC8; // type:func
 CancelSwDialogPlaying__FP2SW                                      = 0x1DDAD0; // type:func
+FUN_001ddb20                                                      = 0x1DDB20; // type:func
+FUN_001ddb58                                                      = 0x1DDB58; // type:func
+FUN_001ddbb8                                                      = 0x1DDBB8; // type:func
+FUN_001ddbf8                                                      = 0x1DDBF8; // type:func
+FUN_001ddc18                                                      = 0x1DDC18; // type:func
+FUN_001ddc38                                                      = 0x1DDC38; // type:func
+FUN_001ddc40                                                      = 0x1DDC40; // type:func
+FUN_001ddc78                                                      = 0x1DDC78; // type:func
+FUN_001ddc90                                                      = 0x1DDC90; // type:func
+FUN_001ddcb0                                                      = 0x1DDCB0; // type:func
+FUN_001ddcc8                                                      = 0x1DDCC8; // type:func
+
+g_grfdfl       = 0x275630; // size:0x10
+g_vecHighlight = 0x275640; // size:0x10
+g_degHighlight = 0x275650; // size:0x4
+g_gMidtone     = 0x275654; // size:0x4
+g_degMidtone   = 0x275658; // size:0x4
+g_gShadow      = 0x27565C; // size:0x4
+g_degShadow    = 0x275660; // size:0x10
 
 g_psw                      = 0x275710; // size:0x4
 g_fLoadDebugInfo           = 0x275714; // size:0x4

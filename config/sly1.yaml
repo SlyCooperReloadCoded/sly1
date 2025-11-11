@@ -225,7 +225,6 @@ segments:
     - [0xd8100, c, P2/stream]
     - [0xd83a8, c, P2/suv]
     - [0xdc480, c, P2/sw]
-    - [0xdeb20, asm, P2/UNKNOWN2] # Unknown, falls alphabetically between sw and tail
     - [0xdece0, c, P2/tail]
     - [0xdf798, c, P2/tank]
     - [0xe0d48, c, P2/target]
@@ -292,6 +291,8 @@ segments:
     - [0x14A428, rodata] #, P2/989snd]
     - [0x14A870, rodata]
     #- [0x14AE20, .rodata, P2/cd]
+    - [0x14afe0, .rodata, P2/dart]
+    - [0x14aff8, rodata] # P2/dartgun Alignment issue, this should be 0x14b000.
     - [0x14B0E0, .rodata, P2/dmas]
     - [0x14B0F8, rodata]
     - [0x14c1e8, .rodata, P2/main]

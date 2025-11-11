@@ -311,3 +311,26 @@ void CancelSwDialogPlaying(SW *psw)
         PopUiActiveBlot(&g_ui);
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddb20);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddb58);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddbb8);
+JUNK_WORD(0x0002102a);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddbf8);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddc18);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddc38);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddc40);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddc78);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddc90);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddcb0);
+
+INCLUDE_ASM("asm/nonmatchings/P2/sw", FUN_001ddcc8);

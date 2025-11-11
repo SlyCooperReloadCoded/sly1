@@ -1,5 +1,6 @@
 #include <dart.h>
 #include <emitter.h>
+#include <jt.h>
 
 extern SNIP s_asnipDart[];
 
@@ -48,9 +49,62 @@ void PostDartLoad(DART *pdart)
     SnipAloObjects(pdart, 1, s_asnipDart);
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/dart", UpdateDart__FP4DARTf);
+void UpdateDart(DART *pdart, float dt)
+{
+    UpdateSo(pdart, dt);
 
-INCLUDE_ASM("asm/nonmatchings/P2/dart", SetDartDarts__FP4DART5DARTS);
+    switch (STRUCT_OFFSET(pdart, 0x550, DARTS))
+    {
+        case DARTS_AvailToFire:
+        case DARTS_ReadyToFire:
+        case DARTS_Sticking:
+        case DARTS_Fading:
+        default:
+        {
+            break;
+        }
+        case DARTS_Airborne:
+        {
+            UpdateDartAirborne(pdart, dt);
+            break;
+        }
+        case DARTS_Stuck:
+        {
+            // pdart->dtMaxStuck, pdart->tDarts, g_pjt->phbsk
+            if (STRUCT_OFFSET(pdart, 0x568, float) < g_clock.t - STRUCT_OFFSET(pdart, 0x554, float) &&
+               (!g_pjt || (HBSK *)pdart->paloParent != STRUCT_OFFSET(g_pjt, 0x23b0, HBSK *)))
+            {
+                SetDartDarts(pdart, DARTS_Fading);
+            }
+            break;
+        }
+    }
+}
+
+void SetDartDarts(DART *pdart, DARTS darts)
+{
+    // pdart->darts
+    if (STRUCT_OFFSET(pdart, 0x550, DARTS) == darts)
+    {
+        return;
+    }
+
+    if (STRUCT_OFFSET(pdart, 0x550, DARTS) == DARTS_Airborne)
+    {
+        STRUCT_OFFSET(pdart, 0x57c, ALO *) = (ALO *)nullptr; // pdart->paloTarget
+        STRUCT_OFFSET(pdart, 0x580, float) = 0.0f; // pdart->dtLaunchToTarget
+        STRUCT_OFFSET(pdart, 0x584, float) = 0.0f; // pdart->dzTarget
+        STRUCT_OFFSET(pdart, 0x588, DARTGUN *) = (DARTGUN *)nullptr; // pdart->pdartgunFiredFrom
+    }
+
+    STRUCT_OFFSET(pdart, 0x550, DARTS) = darts; // pdart->darts
+    STRUCT_OFFSET(pdart, 0x554, float) = g_clock.t; // pdart->tDarts
+
+    if (darts == DARTS_Fading)
+    {
+        FadeAloOut(pdart, STRUCT_OFFSET(pdart, 0x564, float)); // pdart->dtFade
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/dart", ApplyDartThrow__FP4DARTP2PO);
 

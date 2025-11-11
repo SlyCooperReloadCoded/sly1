@@ -6,7 +6,6 @@
 
 #include "common.h"
 #include <break.h>
-#include <dart.h>
 #include <rat.h>
 #include <oid.h>
 #include <so.h>
@@ -19,6 +18,12 @@
 struct DARTGUN : public BRK
 {
     // ...
+    /* 0x744 */ int coidRatTarget;
+    /* 0x748 */ OID aoidRatTarget[8];
+    // ...
+    /* 0x78c */ int cpratInTargetArea;
+    /* 0x790 */ RAT *apratInTargetArea[8];
+    /* 0x7b0 */ int fJtInTargetArea;
 };
 
 void InitDartgun(DARTGUN *pdartgun);
