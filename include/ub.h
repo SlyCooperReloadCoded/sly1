@@ -20,7 +20,12 @@ struct ASEG;
  */
 struct UBG : public GOMER
 {
-	// ...
+    // ...
+    /* 0xc58 */ OID oidPatrolGoal;
+    /* 0xc5c */ int cJump;
+    /* 0xc60 */ STRUCT_PADDING(1);
+    /* 0xc64 */ SO *apsoPads[6];
+    // ...
 };
 
 void InitUbg(UBG *pubg);

@@ -11,7 +11,8 @@
 /**
  * @brief Object ID.
  */
-enum OID {
+enum OID
+{
     OID_Nil = -1,
     OID_Unknown = 0x0,
     OID__MERGED_STATICS = 0x1,
@@ -28,10 +29,18 @@ enum OID {
 
     // ...
 
-    OID_rat = 0x269
+    OID_rat = 0x269,
+
+    // ...
+
+    OID_state_ubb_round_2 = 0x2da,
+    OID_state_ubb_round_3 = 0x2db,
+
+    // ...
+
+    OID_state_ubb_dunk = 0x2e0,
 
     // ...
 };
-
 
 #endif // OID_H

@@ -44,7 +44,7 @@ WRE *PwreGetWrCur(WR *pwr, ENSK ensk, WREK wrek)
 {
     if (pwr->cwre == 0)
     {
-        return (WRE *)0x00;
+        return (WRE *)nullptr;
     }
     if (ensk == ENSK_Set)
     {

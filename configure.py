@@ -390,6 +390,7 @@ PROBLEMATIC_FUNCS = set(
         "FillShaders__Fi",                            # P2/shd
         "UpdateStepPhys__FP4STEP",                    # P2/step
         "DrawTvBands__FP2TVR4GIFS",                   # P2/tv
+        "FIgnoreUbgIntersection__FP3UBGP2SO",         # P2/ub
         "PwarpFromOid__F3OIDT0",                      # P2/xform
         "TriggerWarp__FP4WARP"                        # P2/xform
     ]
