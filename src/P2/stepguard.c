@@ -261,7 +261,13 @@ INCLUDE_ASM("asm/nonmatchings/P2/stepguard", FAbandonSggSearch__FP3SGG);
 
 INCLUDE_ASM("asm/nonmatchings/P2/stepguard", EnsureSggAlarm__FP3SGGP5ALARM);
 
-INCLUDE_ASM("asm/nonmatchings/P2/stepguard", TriggerSggAlarms__FP3SGG4ALTK);
+void TriggerSggAlarms(SGG *psgg, ALTK altk)
+{
+    for (int i = 0; i < STRUCT_OFFSET(psgg, 0x168, int); i++) // psgg->calarms
+    {
+        TriggerAlarm(STRUCT_OFFSET_INDEX(psgg, 0x16c, ALARM *, i), altk); // psgg->palarms[i]
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/stepguard", SetSggSggs__FP3SGG4SGGS);
 
