@@ -1,43 +1,57 @@
 #!/bin/bash
-
 set -e
 
-# Get script directory
-script_dir=$(dirname $0)
-pushd $script_dir > /dev/null
+### Install Dependencies ###
 
-pip install -U -r ../requirements.txt
+PACKAGES="binutils-mips-linux-gnu ninja-build python3 python3-pip python3-venv wine32"
 
-# Elevate privileges
-sudo -v
-
-# Check if sudo
-if [ "$EUID" -ne 0 ]
-  then echo "Installing dependencies requires sudo. Please enter your password."
+# Install missing dependencies
+if ! sudo -n true 2>/dev/null; then
+    echo "Root privileges are required to install dependencies. Please enter your password."
 fi
 
-# Update apt packages
-sudo apt-get update
+if ! sudo -v; then
+    echo "Error: Unable to obtain root privileges"
+    exit 1
+fi
 
-# Setup wine
+echo "Adding i386 architecture support..."
 sudo dpkg --add-architecture i386
-sudo apt-get update
-sudo apt-get install -y wine32
 
-# Install MIPS assembler
-sudo apt-get install -y binutils-mips-linux-gnu
+echo "Updating package lists..."
+sudo apt-get update -qq > /dev/null
 
-# Install Ninja build system
-sudo apt-get install -y ninja-build
+echo "Dependencies: $PACKAGES"
+echo "Installing missing dependencies..."
+sudo apt-get install -y -qq $PACKAGES > /dev/null
 
-# Setup compiler
-./setup_prodg_linux.sh
+PROJECT_DIR="$(dirname "$0")/.."
 
-# Check if disc/SCUS_971.98 exists
-echo "Setup complete!"
-if [ ! -f ../disc/SCUS_971.98 ]; then
-  echo "Now, copy SCUS_971.98 from your copy of the game to the 'disc' directory of this project."
-fi
-echo "To build the project, run the 'build.sh' script."
+pushd $PROJECT_DIR > /dev/null
+trap "popd > /dev/null" EXIT
+
+# Set up Python virtual environment
+echo "Setting up Python virtual environment..."
+python3 -m venv env
+source env/bin/activate
+echo "Installing Python packages..."
+pip install -q -U -r requirements.txt
+
+### Download ProDG compilers and runtimes ###
+
+echo "Starting ProDG setup script..."
+./scripts/setup_prodg_linux.sh
 
 popd > /dev/null
+trap - EXIT
+
+### Final Instructions ###
+
+echo ""
+echo "Quickstart complete!"
+if [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
+    echo "Now, copy SCUS_971.98 from your copy of the game to the 'disc' directory of this project."
+fi
+echo ""
+echo "To enter the python virtual environment, run 'source env/bin/activate' in the project root directory."
+echo "Then, to build the project, run '$(dirname "$0")/build.sh'"
