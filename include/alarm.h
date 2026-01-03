@@ -103,6 +103,12 @@ void DisableAlarmSensors(ALARM *palarm);
 
 void NotifyAlarmSensorsOnTrigger(ALARM *palarm);
 
+/**
+ * @brief Adds a breakable alarm object to the alarm's list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the breakable alarm to add (max 4).
+ */
 void AddAlarmAlbrk(ALARM *palarm, OID oid);
 
 void AddAlarmSensor(ALARM *palarm, OID oid);

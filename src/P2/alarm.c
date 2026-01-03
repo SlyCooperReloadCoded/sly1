@@ -72,7 +72,17 @@ INCLUDE_ASM("asm/nonmatchings/P2/alarm", DisableAlarmSensors__FP5ALARM);
 
 INCLUDE_ASM("asm/nonmatchings/P2/alarm", NotifyAlarmSensorsOnTrigger__FP5ALARM);
 
-INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmAlbrk__FP5ALARM3OID);
+void AddAlarmAlbrk(ALARM *palarm, OID oid)
+{
+    uint calbrks = STRUCT_OFFSET(palarm, 0x564, int); // palarm->calbrks
+
+    if (calbrks < 4) // Max 4 breakable alarms
+    {
+        // Add new breakable object ID to the list
+        STRUCT_OFFSET_INDEX(palarm, 0x568, OID, calbrks) = oid; // palarm->aoidAlbrks[calbrks]
+        STRUCT_OFFSET(palarm, 0x564, int) = calbrks + 1;        // palarm->calbrks
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmSensor__FP5ALARM3OID);
 
