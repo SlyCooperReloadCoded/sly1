@@ -53,7 +53,7 @@ New contributors are welcome to make a pull request! If you would like to help b
 
 ## ⚡ Quickstart
 
-You can quickly setup the project on Linux (or WSL) using the quickstart script. Follow these three steps get started.
+You can quickly setup the project on Debian-based systems such as Ubuntu (or WSL) using the quickstart script. Follow these three steps to get started:
 
 ### 1. Clone the repo and run quickstart.sh
 
@@ -88,6 +88,8 @@ If you have any issues, or you prefer to set up the project manually, follow the
 
 The project can be built on Linux (or Windows using WSL). Follow the instructions below to set up the build environment.
 
+> **Note:** These instructions assume a Debian-based system such as Ubuntu. For other distributions, adapt the package manager commands and package names accordingly.
+
 ### 1. Clone the repository
 
 Clone the repo to your local machine:
@@ -103,10 +105,10 @@ To build the project, you will need to extract the original ELF file from your o
 
 ### 3. Setup Python environment
 
-If you don't have Python 3.9 or higher, install it:
+Install Python 3.9 or higher, pip and venv:
 
 ```bash
-sudo apt-get install python3 python3-pip
+sudo apt-get install python3 python3-pip python3-venv
 ```
 
 Create a Python environment for the project:
@@ -129,18 +131,17 @@ pip3 install -U -r requirements.txt
 
 ### 4. Setup build environment
 
-Setup wine:
+Install 32 bit Wine and MIPS assembler:
 
 ```bash
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install wine32
+sudo apt-get install wine32 binutils-mips-linux-gnu
 ```
-
-Install the MIPS assembler:
+Install Ninja build system:
 
 ```bash
-sudo apt-get install binutils-mips-linux-gnu
+sudo apt-get install ninja-build
 ```
 
 Setup the compiler using the provided script:
@@ -148,20 +149,6 @@ Setup the compiler using the provided script:
 ```bash
 ./scripts/setup_prodg_linux.sh
 ```
-
-<!--#### Windows
-
-*Prerequisites: [Chocolatey](https://chocolatey.org/install)*
-
-1. Install 7zip:
-```powershell
-choco install 7zip
-```
-
-2. Setup build environment:
-```powershell
-.\scripts\setup_prodg_windows.bat
-```-->
 
 ### 5. Configure and build the project
 
@@ -194,19 +181,22 @@ Once you have those, and you have built the executable `SCUS_971.98`, you can ru
 2. The alias/symlink will be recognized as a game in PCSX2. Right click on it, then click `Properties... > Disc Path > Browse` and select the ISO of your game backup.
 3. Click "Close" and boot the game as normal.
 
-You only have make the alias/symlink once, and it will update every time you build the project.
+You only have to make the alias/symlink once, and it will update every time you build the project.
 
 ### Method 2: Run PCSX2 from command line
 
 To boot the elf in PCSX2 from the command line, use the following command:
 
 ```bash
-pcsx2.exe -elf "C:/.../sly1/out/SCUS_971.98" "C:/.../GameBackup.iso"
+pcsx2 -elf "./out/SCUS_971.98" "/path/to/GameBackup.iso"
 ```
 
-* Replace `pcsx2.exe` with the path to your PCSX2 v2.0 executable (it will be an `.appimage` file on Linux or `.exe` file on Windows).
-* The `-elf` parameter specifies the path to the `SCUS_971.98` you built from this project. Replace `...` with the path to this project on your computer. The emulator will use this ELF to boot the game.
-* The last argument is the path to your game ISO. Replace `...` with the path to a backup of your own game disc. This is where the emulator will load assets from.
+* Replace `pcsx2` with the path to your PCSX2 executable if not found automatically:
+  * <b>AppImage:</b> Use the path to the `.appimage` file.
+  * <b>Flatpak:</b> Grant PCSX2 access to your home directory with `flatpak override --user net.pcsx2.PCSX2 --filesystem=home` or a specific directory using `--filesystem=/path/to/files`. Then use `flatpak run net.pcsx2.PCSX2` as the executable. Relative paths to the ELF and ISO files will not work, only full system paths.
+  * <b>Windows:</b> Use the path to `pcsx2.exe`.
+* The `-elf` parameter specifies the path to the `SCUS_971.98` you built from this project. Replace the example path if necessary. The emulator will use this ELF to boot the game.
+* The last argument is the path to your game ISO. Replace the example path with the path to a backup of your own game disc. This is where the emulator will load assets from.
 
 ### Method 3: Autorun script
 
