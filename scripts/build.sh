@@ -1,17 +1,17 @@
 #!/bin/bash
+set -e
 
-# Get directory of this script
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-# CD into project dir
-cd $DIR/..
+PROJECT_DIR="$(dirname "$0")/.."
 
 # Ensure disc/SCUS_971.98 exists
-if [ ! -f disc/SCUS_971.98 ]; then
-  echo "Error: SCUS_971.98 not found. Copy it from your own game disc to the 'disc' directory of this project."
-  exit
+if [ ! -f "$PROJECT_DIR/disc/SCUS_971.98" ]; then
+    echo "Error: SCUS_971.98 not found. Copy it from your own game disc to the 'disc' directory of this project." >&2
+    exit 1
 fi
 
-# Configure and build
-python3 configure.py --clean
+pushd $PROJECT_DIR > /dev/null
+trap "popd > /dev/null" EXIT
+
+source "env/bin/activate"
+python3 "configure.py" --clean
 ninja

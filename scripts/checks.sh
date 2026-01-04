@@ -1,12 +1,14 @@
 #!/bin/bash
-
 set -e
 
-script_dir=$(dirname $0)
-pushd $script_dir/.. > /dev/null
+PROJECT_DIR="$(dirname "$0")/.."
 
-python3 configure.py --clean && ninja
-python3 configure.py --clean --objects && ninja
+pushd $PROJECT_DIR > /dev/null
+trap "popd > /dev/null" EXIT
+
+source "env/bin/activate"
+python3 "configure.py" --clean && ninja
+python3 "configure.py" --clean --objects && ninja
 
 # Output the progress report to a file if --report is not passed, otherwise discard it.
 if [[ "$1" == "--report" ]]; then

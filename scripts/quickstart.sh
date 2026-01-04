@@ -53,5 +53,4 @@ if [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
     echo "Now, copy SCUS_971.98 from your copy of the game to the 'disc' directory of this project."
 fi
 echo ""
-echo "To enter the python virtual environment, run 'source env/bin/activate' in the project root directory."
-echo "Then, to build the project, run '$(dirname "$0")/build.sh'"
+echo "To build the project, run '$(dirname "$0")/build.sh'"
