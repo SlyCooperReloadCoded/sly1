@@ -55,19 +55,32 @@ New contributors are welcome to make a pull request! If you would like to help b
 
 You can quickly setup the project on Debian-based systems such as Ubuntu (or WSL) using the quickstart script. Follow these three steps to get started:
 
-### 1. Clone the repo and run quickstart.sh
-
-Copy and run the following block of commands. It may ask for your password to install dependencies.
+### 1. Clone the repo
 
 ```bash
-git clone https://github.com/theonlyzac/sly1 && \
-cd sly1 && \
-./scripts/quickstart.sh
+git clone https://github.com/theonlyzac/sly1
+cd sly1
 ```
 
-### 2. Extract the executable from your disc
+### 2. Run quickstart
 
-Copy the file `SCUS_971.98` from your Sly 1 game disc to the `disc` directory of the project. It is needed to build.
+Run the `quickstart.sh` script in the `scripts` directory. It may ask for your password to install dependencies.
+
+You have two options to automatically extract your original game executable:
+
+- <b>Method 1:</b> Copy the NTSC-U Sly 1 game ISO to the `disc` directory and then run:
+
+  ```bash
+  ./scripts/quickstart.sh
+  ```
+
+- <b>Method 2:</b> Specify a path to the ISO:
+
+  ```bash
+  ./scripts/quickstart.sh /path/to/GameBackup.iso
+  ```
+
+Otherwise, just copy the `SCUS_971.98` file from your game disc to the `disc` directory manually.
 
 ### 3. Build the project
 
@@ -75,10 +88,9 @@ Copy the file `SCUS_971.98` from your Sly 1 game disc to the `disc` directory of
 ./scripts/build.sh
 ```
 
-If it works, you will see this:
+If the build succeeds, you will see this:
 
 ```
-[XXX/XXX] sha1sum config/checksum.sha1
 out/SCUS_971.98: OK
 ```
 

@@ -4,6 +4,31 @@ set -e
 ### Install Dependencies ###
 
 PACKAGES="binutils-mips-linux-gnu ninja-build python3 python3-pip python3-venv wine32"
+ISO_ARG="$1"
+PROJECT_DIR="$(dirname "$0")/.."
+DISC_DIR="$PROJECT_DIR/disc"
+
+# If no ISO specified, look for one in the disc directory
+if [ -z "$ISO_ARG" ] && [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
+	echo "No ISO file specified, looking in disc directory..."
+	ISO_FILES=("$DISC_DIR"/*.iso)
+	if [ -f "${ISO_FILES[0]}" ]; then
+		ISO_ARG="${ISO_FILES[0]}"
+		echo "Found ISO: $(basename "$ISO_ARG")"
+	else
+	    echo "No ISO found in disc directory. Skipping executable extraction."
+	fi
+fi
+
+# If ISO is specified, validate it
+if [ -n "$ISO_ARG" ]; then
+	if [ ! -f "$ISO_ARG" ]; then
+		echo "Error: ISO file not found: $ISO_ARG" >&2
+		exit 1
+	fi
+	ISO_ARG="$(realpath "$ISO_ARG")"
+    PACKAGES="$PACKAGES libarchive-tools"
+fi
 
 # Install missing dependencies
 if ! sudo -n true 2>/dev/null; then
@@ -11,7 +36,7 @@ if ! sudo -n true 2>/dev/null; then
 fi
 
 if ! sudo -v; then
-    echo "Error: Unable to obtain root privileges"
+    echo "Error: Unable to obtain root privileges" >&2
     exit 1
 fi
 
@@ -24,8 +49,6 @@ sudo apt-get update -qq > /dev/null
 echo "Dependencies: $PACKAGES"
 echo "Installing missing dependencies..."
 sudo apt-get install -y -qq $PACKAGES > /dev/null
-
-PROJECT_DIR="$(dirname "$0")/.."
 
 pushd $PROJECT_DIR > /dev/null
 trap "popd > /dev/null" EXIT
@@ -42,6 +65,13 @@ pip install -q -U -r requirements.txt
 echo "Starting ProDG setup script..."
 ./scripts/setup_prodg_linux.sh
 
+## Extract ELF ###
+
+if [ -n "$ISO_ARG" ]; then
+    echo "Extracting executable from ISO..."
+    ./scripts/extract_elf.sh "$ISO_ARG"
+fi
+
 popd > /dev/null
 trap - EXIT
 
@@ -49,8 +79,8 @@ trap - EXIT
 
 echo ""
 echo "Quickstart complete!"
-if [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
-    echo "Now, copy SCUS_971.98 from your copy of the game to the 'disc' directory of this project."
-fi
 echo ""
+if [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
+    echo "Copy SCUS_971.98 from your copy of the game to the 'disc' directory of this project."
+fi
 echo "To build the project, run '$(dirname "$0")/build.sh'"
