@@ -186,7 +186,7 @@ Running the compiled executable requires [PCSX2 2.0](https://pcsx2.net/). You mu
 
 Once you have those, and you have built the executable `SCUS_971.98`, you can run it using one of three methods:
 
-### Method 1: Boot from PCSX2 GUI (Recommended)
+### Method 1: Run from PCSX2 GUI
 
 1. In your PCSX2 games folder, make an alias (Linux) or symbolic link (Windows) called `SCUS_971.98.elf`, which points to the `out/SCUS_971.98` file built by this project.
     * Note: The alias/symlink must point to `out/SCUS_971.98`, not `out/SCUS_971.98.elf`.
@@ -195,7 +195,7 @@ Once you have those, and you have built the executable `SCUS_971.98`, you can ru
 
 You only have to make the alias/symlink once, and it will update every time you build the project.
 
-### Method 2: Run PCSX2 from command line
+### Method 2: Run from PCSX2 CLI
 
 To boot the elf in PCSX2 from the command line, use the following command:
 
@@ -212,7 +212,15 @@ pcsx2 -elf "./out/SCUS_971.98" "/path/to/GameBackup.iso"
 
 ### Method 3: Autorun script
 
-The `run.sh` script in the `scripts` dir will automatically rebuild the executable and run it in the PCSX2 emulator. To use it, you must first edit the script to set the `PCSX2_PATH` and `ISO_PATH` variables to the correct paths on your system.
+The `run.sh` script in the `scripts` directory will run the last successful build in the PCSX2 emulator. It will automatically detect PCSX2 installed via package manager, Flatpak, AppImage, or XDG Desktop entries in that order and use the first ISO found in the `disc` directory to load assets.
+
+Optionally, you can specify what ISO file to use:
+
+```bash
+./scripts/run.sh /path/to/GameBackup.iso
+```
+
+To detect the PCSX2 AppImage, it must be placed in the `tools` directory, or be "Installed" via an AppImage manager utility.
 
 ## 📁 Project Structure
 

@@ -85,3 +85,4 @@ __pycache__/
 .vscode
 temp/
 *.diff
+*.AppImage
