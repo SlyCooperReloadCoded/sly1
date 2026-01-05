@@ -186,14 +186,17 @@ Running the compiled executable requires [PCSX2 2.0](https://pcsx2.net/). You mu
 
 Once you have those, and you have built the executable `SCUS_971.98`, you can run it using one of three methods:
 
-### Method 1: Run from PCSX2 GUI
+### Method 1: Autorun script
 
-1. In your PCSX2 games folder, make an alias (Linux) or symbolic link (Windows) called `SCUS_971.98.elf`, which points to the `out/SCUS_971.98` file built by this project.
-    * Note: The alias/symlink must point to `out/SCUS_971.98`, not `out/SCUS_971.98.elf`.
-2. The alias/symlink will be recognized as a game in PCSX2. Right click on it, then click `Properties... > Disc Path > Browse` and select the ISO of your game backup.
-3. Click "Close" and boot the game as normal.
+The `run.sh` script in the `scripts` directory will run the last successful build in the PCSX2 emulator. It will automatically detect PCSX2 installed via package manager, Flatpak, AppImage, or XDG Desktop entries in that order and use the first ISO found in the `disc` directory to load assets.
 
-You only have to make the alias/symlink once, and it will update every time you build the project.
+Optionally, you can specify what ISO file to use:
+
+```bash
+./scripts/run.sh /path/to/GameBackup.iso
+```
+
+To detect the PCSX2 AppImage, it must be placed in the `tools` directory, or be "Installed" via an AppImage manager utility.
 
 ### Method 2: Run from PCSX2 CLI
 
@@ -210,17 +213,14 @@ pcsx2 -elf "./out/SCUS_971.98" "/path/to/GameBackup.iso"
 * The `-elf` parameter specifies the path to the `SCUS_971.98` you built from this project. Replace the example path if necessary. The emulator will use this ELF to boot the game.
 * The last argument is the path to your game ISO. Replace the example path with the path to a backup of your own game disc. This is where the emulator will load assets from.
 
-### Method 3: Autorun script
+### Method 3: Run from PCSX2 GUI
 
-The `run.sh` script in the `scripts` directory will run the last successful build in the PCSX2 emulator. It will automatically detect PCSX2 installed via package manager, Flatpak, AppImage, or XDG Desktop entries in that order and use the first ISO found in the `disc` directory to load assets.
+1. In your PCSX2 games folder, make an alias (Linux) or symbolic link (Windows) called `SCUS_971.98.elf`, which points to the `out/SCUS_971.98` file built by this project.
+    * Note: The alias/symlink must point to `out/SCUS_971.98`, not `out/SCUS_971.98.elf`.
+2. The alias/symlink will be recognized as a game in PCSX2. Right click on it, then click `Properties... > Disc Path > Browse` and select the ISO of your game backup.
+3. Click "Close" and boot the game as normal.
 
-Optionally, you can specify what ISO file to use:
-
-```bash
-./scripts/run.sh /path/to/GameBackup.iso
-```
-
-To detect the PCSX2 AppImage, it must be placed in the `tools` directory, or be "Installed" via an AppImage manager utility.
+You only have to make the alias/symlink once, and it will update every time you build the project.
 
 ## 📁 Project Structure
 
