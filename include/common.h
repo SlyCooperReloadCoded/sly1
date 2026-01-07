@@ -23,6 +23,18 @@
  */
 #define STRUCT_OFFSET(pointer, offset, type) (*(type *)((uint8_t *)(pointer) + (offset)))
 
+/**
+ * @brief Access an array element at a struct offset with index.
+ * Uses expression ordering that generates matching assembly.
+ * @param pointer Pointer to the struct.
+ * @param offset Offset of the array within the struct.
+ * @param type Type of the array elements.
+ * @param index Array index to access.
+ */
+#define STRUCT_OFFSET_INDEX(pointer, offset, type, index) \
+    (*(type *)((int)(pointer) + (((index) << 2) + (offset))))
+
+
 // Helper macros for struct padding (workaround for eegcc not supporting macro expansion in struct fields)
 #define STRUCT_PADDING_CAT(a, b) a##b
 #define STRUCT_PADDING_INTERNAL(a, b) STRUCT_PADDING_CAT(a, b)
