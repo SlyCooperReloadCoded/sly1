@@ -20,6 +20,10 @@ There is an equivalent script for Windows, but the assembler does not work on Wi
 
 Runs a clean reconfigure (deletes build files and splits the binary), then builds the project. Will warn you if `disc/SCUS_971.98` is not present.
 
+### diff.sh
+
+Compares a decompiled function against the original using objdiff. Takes a function name as a required argument and an optional object name.
+
 ### run.sh
 
 Runs the last successful build in an emulator. Before using, you must install PCSX2, build the project, and either place an ISO in the `disc` directory or specify one as an argument. The script will boot the emulator using the compiled elf, and load the assets from the provided ISO.
