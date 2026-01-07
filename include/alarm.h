@@ -120,6 +120,12 @@ void AddAlarmAlbrk(ALARM *palarm, OID oid);
  */
 void AddAlarmSensor(ALARM *palarm, OID oid);
 
+/**
+ * @brief Adds a stepguard object to the alarm's stepguard list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the stepguard to add (max 6).
+ */
 void AddAlarmStepguard(ALARM *palarm, OID oid);
 
 void SetAlarmRsmg(ALARM *palarm, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal);

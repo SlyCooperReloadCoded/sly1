@@ -96,7 +96,17 @@ void AddAlarmSensor(ALARM *palarm, OID oid)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmStepguard__FP5ALARM3OID);
+void AddAlarmStepguard(ALARM *palarm, OID oid)
+{
+    uint coidStepguards = STRUCT_OFFSET(palarm, 0x600, int); // palarm->coidStepguards
+
+    if (coidStepguards < 6) // Max 6 stepguards
+    {
+        // Add new stepguard object ID to the list
+        STRUCT_OFFSET_INDEX(palarm, 0x604, OID, coidStepguards) = oid; // palarm->aoidStepguards[coidStepguards]
+        STRUCT_OFFSET(palarm, 0x600, int) = coidStepguards + 1; // palarm->coidStepguards
+    }
+}
 
 void SetAlarmRsmg(ALARM *palarm, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal)
 {
