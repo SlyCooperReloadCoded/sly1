@@ -112,6 +112,12 @@ void NotifyAlarmSensorsOnTrigger(ALARM *palarm);
  */
 void AddAlarmAlbrk(ALARM *palarm, OID oid);
 
+/**
+ * @brief Adds a sensor object to the alarm's sensor list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the sensor to add (max 16).
+ */
 void AddAlarmSensor(ALARM *palarm, OID oid);
 
 void AddAlarmStepguard(ALARM *palarm, OID oid);
