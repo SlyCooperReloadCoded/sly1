@@ -72,6 +72,7 @@ enum FSO
 struct SO : public ALO
 {
     // ...
+    //* 0x368 */ float mass;
 };
 
 /**
@@ -140,6 +141,12 @@ void RenderSoSelf(SO *pso, CM *pcm, RO *pro);
 
 void UpdateSo(SO *pso, float dt);
 
+/**
+ * @brief Sets the mass of a scene object.
+ *
+ * @param pso Pointer to the SO.
+ * @param m The new mass value.
+ */
 void SetSoMass(SO *pso, float m);
 
 void AdjustSoMomint(SO *pso, float r);
