@@ -25,3 +25,21 @@
                          : "memory");                                          \
         __result;                                                              \
     })
+
+/**
+ * @brief Read MIPS CP0 Count register (register $9).
+ *
+ * @details The Count register increments automatically every CPU cycle and is
+ *          used for high-resolution timing. On PS2 EE, it runs at 294.912 MHz.
+ *          https://psi-rockin.github.io/ps2tek/#eecop0timer
+ *
+ * @return 32-bit Count value as unsigned long
+ */
+#define READ_CP0_COUNT()                                                       \
+    ({                                                                         \
+        unsigned long __result;                                                \
+        __asm__ volatile("mfc0 %0, $9" : "=r"(__result));                      \
+        __result;                                                              \
+    })
+
+#endif // INTRINSICS_H

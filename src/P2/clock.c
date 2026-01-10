@@ -1,4 +1,5 @@
 #include <clock.h>
+#include <intrinsics.h>
 
 // constants
 static const int CLOCK_FRAMERATE = 60; // 60 FPS
@@ -84,7 +85,7 @@ void StartupClock()
     // Count is the MIPS DeltaTime, its a 32b value, and is the 9th reg of CoP0. "Count increments automatically every EE cycle." 
     // https://psi-rockin.github.io/ps2tek/#eecop0timer:~:text=%2409%20%2D%20COP0.Count,every%20EE%20cycle -Zryu
     ulong ulCountValue;
-    __asm__ volatile ("mfc0 %0, $9" : "=r"(ulCountValue)); // Asm function that puts $9 (c0_count) from CP0 into $a0.
+    ulCountValue = READ_CP0_COUNT();
 
     s_tickLastRaw = (TICK)ulCountValue; 
     g_clock.tickFrame = TickNow();
@@ -101,9 +102,7 @@ const TICK TickNow()
     ulong ulValue;     // MIPS tick in coprocessor 0 (reg 9 Count)
 
     // Get Count from CP0 reg 9
-    __asm__ volatile (
-    "mfc0 %0, $9" : "=r"(ulValue)
-    );
+    ulValue = READ_CP0_COUNT();
 
     // Saving 32b Count value into a 64b var.
     ulCountLow = ulValue;
