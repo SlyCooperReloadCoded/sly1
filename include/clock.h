@@ -29,59 +29,60 @@ extern float D_0024CD4C;
 extern float g_rtClock;
 extern float g_rtClockPowerUp;
 extern CLOCK g_clock;
-
-//extern TICK s_tickLastRaw;; // Should be static.
+// extern TICK s_tickLastRaw; // Should be static.
 extern ulong cWrapAround; // Should be static, and not initialized. Replace once bss section of the TU is migrated.
 
-
 /**
- * @brief Sets the rate of the global clock.
+ * @brief Sets the global clock rate multiplier and enables/disables the clock.
  *
- * @param rt The new tick rate.
+ * @param rt The new clock rate multiplier (1.0 = normal, > 1.0 = faster).
  */
 void SetClockRate(float rt);
 
 /**
- * @brief Updates clock values based to time elapsed.
+ * @brief Updates clock state based on elapsed time, with clamping and scaling.
  *
- * @param pclock Pointer to the clock.
+ * @details Clamps delta time to 1-2 frames, applies rate multipliers if enabled.
+ *
+ * @param pclock Pointer to the clock to update.
  */
 void MarkClockTick(CLOCK *pclock);
 
 /**
- * @brief Updates clock values based to time elapsed.
+ * @brief Updates clock with raw elapsed time only (no clamping or scaling).
  *
- * Only updates the real clock values (those determined by the EE clock cyclerate).
- *
- * @param pclock Pointer to the clock.
+ * @param pclock Pointer to the clock to update.
  */
-void MarkClockTickRealOnly(CLOCK *pClock);
+void MarkClockTickRealOnly(CLOCK *pclock);
 
 /**
- * @brief Resets the clock to the given time t.
+ * @brief Resets the clock's accumulated time to a specific value.
  *
- * @param pclock Pointer to the clock.
- * @param t Time to set.
+ * @param pclock Pointer to the clock to reset.
+ * @param t Time value in seconds to set.
  */
 void ResetClock(CLOCK *pclock, float t);
 
 /**
- * @brief Sets the fEnabled flag on the clock to the given value.
+ * @brief Enables or disables a clock instance.
  *
  * @param pclock Pointer to the clock.
- * @param fEnabled 1 to enable, 0 to disable.
+ * @param fEnabled Non-zero to enable, zero to disable.
  */
 void SetClockEnabled(CLOCK *pclock, int fEnabled);
 
 /**
- * @brief Initializes and enables the global clock.
+ * @brief Initializes the clock system.
  */
 void StartupClock();
 
 /**
- * @brief Gets the current tick.
+ * @brief Returns a 64-bit tick count derived from the 32-bit hardware counter.
  *
- * @return The current tick.
+ * @details Extends the 32-bit CP0 Count register to 64 bits by tracking overflows.
+ *
+ * @return 64-bit tick value: upper 32 bits = wraparound count, lower 32 bits =
+ * Count register.
  */
 const TICK TickNow();
 
