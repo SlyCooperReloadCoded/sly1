@@ -79,8 +79,13 @@ struct BTN
  * @class VOL_BUTTON
  * @brief Volume button.
  */
-struct VOLBTN
+struct VOLBTN : public SO
 {
+    // ...
+    /* 0x550 */ int coidPush;
+    /* 0x554 */ OID aoidPush[8];
+    //...
+    /* 0x5c0 */ BTN btn;
     // ...
 };
 

@@ -105,7 +105,12 @@ INCLUDE_ASM("asm/nonmatchings/P2/button", AddButtonPushClass__FP6BUTTON3CID);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", AddButtonNoPushClass__FP6BUTTON3CID);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", AddVolbtnPushObject__FP6VOLBTN3OID);
+void AddVolbtnPushObject(VOLBTN *pvolbtn, OID oid)
+{
+    int coidPush = STRUCT_OFFSET(pvolbtn, 0x550, int);        // pvolbtn->coidPush
+    STRUCT_OFFSET_INDEX(pvolbtn, 0x554, OID, coidPush) = oid; // pvolbtn->aoidPush[coidPush]
+    STRUCT_OFFSET(pvolbtn, 0x550, int) = coidPush + 1;        // pvolbtn->coidPush
+}
 
 void SetButtonRsmg(BUTTON *pbutton, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal)
 {
