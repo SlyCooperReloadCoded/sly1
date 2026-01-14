@@ -1,3 +1,4 @@
+#include <aseg.h>
 #include <blend.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/blend", VerifyAeaEquivalence__FiP2EAiT1);
@@ -14,4 +15,12 @@ JUNK_ADDIU(90);
 
 INCLUDE_ASM("asm/nonmatchings/P2/blend", ReblendAsegbl__FP6ASEGBLiiPv);
 
-INCLUDE_ASM("asm/nonmatchings/P2/blend", SetAsegblSlerp__FP6ASEGBLP3ALO);
+void SetAsegblSlerp(ASEGBL *pasegbl, ALO *palo)
+{
+    CHN *pchn = PchnFindAseg(pasegbl, palo);
+    if (!pchn)
+        return;
+    if (!STRUCT_OFFSET(pchn, 0x8, void *))
+        return;
+    STRUCT_OFFSET(STRUCT_OFFSET(pchn, 0x8, void *), 0x18, int) = 1;
+}
