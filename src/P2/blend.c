@@ -1,7 +1,39 @@
 #include <aseg.h>
 #include <blend.h>
 
+// 96% Match
 INCLUDE_ASM("asm/nonmatchings/P2/blend", VerifyAeaEquivalence__FiP2EAiT1);
+#ifdef SKIP_ASM
+void VerifyAeaEquivalence(int cea0, EA *aea0, int cea1, EA *aea1)
+{
+    int fLess = (cea0 < cea1);
+    int ceaMin = cea0;
+
+    if (cea0 >= cea1)
+    {
+        ceaMin = cea1;
+    }
+
+    int i;
+
+    if (0 < ceaMin)
+    {
+        if (fLess)
+        {
+            i = cea0;
+        }
+        else
+        {
+            i = cea1;
+        }
+
+        do
+        {
+            i--;
+        } while (i != 0);
+    }
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/P2/blend", EnsureAsegBlendDynamic__FP3ALOiiPviPiT5PP6ASEGBL);
 
