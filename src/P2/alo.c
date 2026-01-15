@@ -1,7 +1,8 @@
-#include <alo.h>
 #include <act.h>
-#include <shd.h>
+#include <alo.h>
+#include <math.h>
 #include <shadow.h>
+#include <shd.h>
 #include <target.h>
 
 extern VTACT g_vtactseg;
@@ -291,7 +292,12 @@ void GetAloShadowFarCast(ALO *palo, float *psFarCast)
     *psFarCast = pshadow->sFarCast;
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowConeAngle__FP3ALOPf);
+void GetAloShadowConeAngle(ALO *palo, float *pdegConeAngle)
+{
+    const float RAD_TO_DEG = 57.295776f;
+    SHADOW *pshadow = PshadowInferAlo(palo);
+    *pdegConeAngle = atan2f(pshadow->sNearRadius / pshadow->sNearCast, 1.0f) * RAD_TO_DEG * 2.0f;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowFrustrumUp__FP3ALOP6VECTOR);
 
