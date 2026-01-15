@@ -252,25 +252,20 @@ void GetAloCastShadow(ALO *palo, int *pfCastShadow)
     *pfCastShadow = (STRUCT_OFFSET(palo, 0x284, SHADOW *) != (SHADOW *)nullptr);
 }
 
-/**
- * @todo 63.18% match.
- * https://decomp.me/scratch/AqBOS
- */
-INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowShader__FP3ALOP3OID);
-#ifdef SKIP_ASM
 void GetAloShadowShader(ALO *palo, OID *poidShdShadow)
 {
+    // palo->pshadow
     SHADOW *pshadow = STRUCT_OFFSET(palo, 0x284, SHADOW *);
 
-    if (!pshadow || !pshadow->pshd)
+    if (pshadow && pshadow->pshd)
+    {
+        *poidShdShadow = (OID)pshadow->pshd->oid;
+    }
+    else
     {
         *poidShdShadow = OID_Nil;
-        return;
     }
-
-    *poidShdShadow = (OID)(pshadow->pshd->oid);
 }
-#endif // SKIP_ASM
 
 void GetAloShadowNearRadius(ALO *palo, float *psNearRadius)
 {
