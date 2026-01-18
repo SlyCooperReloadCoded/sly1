@@ -17,6 +17,18 @@ struct ASEGA;
 /**
  * @brief Unknown.
  */
+enum IAK
+{
+    IAK_Nil = -1,
+    IAK_Time = 0,
+    IAK_Proportion = 1,
+    IAK_Nearest = 2,
+    IAK_Max = 3
+};
+
+/**
+ * @brief Unknown.
+ */
 enum SEEK
 {
     SEEK_Nil = -1,
@@ -55,7 +67,11 @@ struct ASEG : public LO
  */
 struct ASEGD
 {
-    // ...
+    /* 0x00 */ ASEG *paseg;
+    /* 0x04 */ OID oidAseg;
+    /* 0x08 */ IAK iak;
+    /* 0x0c */ float tLocal;
+    /* 0x10 */ float svtLocal;
 };
 
 /**

@@ -1,6 +1,8 @@
 #include <act.h>
 #include <alo.h>
+#include <aseg.h>
 #include <math.h>
+#include <memory.h>
 #include <shadow.h>
 #include <shd.h>
 #include <target.h>
@@ -157,7 +159,22 @@ INCLUDE_ASM("asm/nonmatchings/P2/alo", SetAloInitialVelocity__FP3ALOP6VECTOR);
 
 INCLUDE_ASM("asm/nonmatchings/P2/alo", SetAloInitialAngularVelocity__FP3ALOP6VECTOR);
 
-INCLUDE_ASM("asm/nonmatchings/P2/alo", PasegdEnsureAlo__FP3ALO);
+ASEGD *PasegdEnsureAlo(ALO *palo)
+{
+    ASEGD *&pasegd = STRUCT_OFFSET(palo, 0x2a0, ASEGD *); // palo->pasegd
+
+    if (!pasegd)
+    {
+        pasegd = (ASEGD *)PvAllocSwClearImpl(sizeof(ASEGD));
+
+        pasegd->oidAseg = OID_Nil;
+        pasegd->iak = IAK_Time;
+        pasegd->tLocal = 0.0f;
+        pasegd->svtLocal = 1.0f;
+    }
+
+    return pasegd;
+}
 
 void SetAloFastShadowRadius(ALO *palo, float sRadius)
 {
