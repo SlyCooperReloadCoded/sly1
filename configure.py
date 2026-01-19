@@ -34,7 +34,7 @@ COMMON_INCLUDES = "-Iinclude -isystem include/sdk/ee -isystem include/gcc"
 CC_DIR = f"{TOOLS_DIR}/cc/bin"
 COMMON_COMPILE_FLAGS = f"-x c++ -B{TOOLS_DIR}/cc/lib/gcc-lib/ee/2.95.2/ -O2 -G0 -ffast-math"
 
-WINE = "wine"
+WINE = "WINEDEBUG=-all wine"
 
 GAME_GCC_CMD = f"{CC_DIR}/ee-gcc.exe -c {COMMON_INCLUDES} {COMMON_COMPILE_FLAGS} $in"
 COMPILE_CMD = f"{GAME_GCC_CMD}"
@@ -224,7 +224,7 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
     #MARK: Rules
     cross = "mips-linux-gnu-"
 
-    ld_args = "-EL -T config/undefined_syms_auto.txt -T config/undefined_funcs_auto.txt -Map $mapfile -T $in -o $out"
+    ld_args = "-EL -T config/undefined_syms_auto.txt -T config/undefined_funcs_auto.txt -Map $mapfile -T $in -o $out --no-warn-rwx-segments"
 
     ninja.rule(
         "as",
