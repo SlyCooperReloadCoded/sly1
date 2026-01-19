@@ -1,5 +1,6 @@
 #include <button.h>
 #include <chkpnt.h>
+#include <stddef.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", PostAshLoad__FP2SWP3ASHP3ALO);
 
@@ -29,11 +30,16 @@ INCLUDE_ASM("asm/nonmatchings/P2/button", FAddRsmg__FP4RSMGiPii3OIDN24);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerRsmg__FP2SWiP4RSMGP2LOi);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", RunBtnAsegs__FP3BTN4IASHi);
+INCLUDE_ASM("asm/nonmatchings/P2/button", RunBtnAsegs__FP3BTN4IASHii);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerBtn__FP3BTNii);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", UntriggerBtn__FP3BTNi);
+void UntriggerBtn(BTN *pbtn, int fSeekToEnd)
+{
+    HandleLoSpliceEvent(pbtn->paloOwner, 3, 0, NULL); // untrigger event
+    RunBtnAsegs(pbtn, IASH_Off, fSeekToEnd, 0);
+    pbtn->paloOwner->pvtlo->pfnSendLoMessage(pbtn->paloOwner, MSGID_button_untrigger, pbtn);
+}
 
 void InitButton(BUTTON *pbutton)
 {
