@@ -2,6 +2,7 @@
 Configures the project for building. Invokes splat to split the binary and
 creates build files for ninja.
 """
+
 #! /usr/bin/env python3
 import argparse
 import os
@@ -17,7 +18,7 @@ import splat
 import splat.scripts.split as split
 from splat.segtypes.linker_entry import LinkerEntry
 
-#MARK: Constants
+# MARK: Constants
 ROOT = Path(__file__).parent.resolve()
 TOOLS_DIR = ROOT / "tools"
 OUTDIR = "out"
@@ -32,7 +33,9 @@ PRE_ELF_PATH = f"{OUTDIR}/{BASENAME}.elf"
 COMMON_INCLUDES = "-Iinclude -isystem include/sdk/ee -isystem include/gcc"
 
 CC_DIR = f"{TOOLS_DIR}/cc/bin"
-COMMON_COMPILE_FLAGS = f"-x c++ -B{TOOLS_DIR}/cc/lib/gcc-lib/ee/2.95.2/ -O2 -G0 -ffast-math"
+COMMON_COMPILE_FLAGS = (
+    f"-x c++ -B{TOOLS_DIR}/cc/lib/gcc-lib/ee/2.95.2/ -O2 -G0 -ffast-math"
+)
 
 WINE = "WINEDEBUG=-all wine"
 
@@ -49,6 +52,7 @@ CATEGORY_MAP = {
     "data": "Data",
 }
 
+
 def clean():
     """
     Clean all products of the build process.
@@ -59,7 +63,7 @@ def clean():
         "build.ninja",
         "permuter_settings.toml",
         "objdiff.json",
-        LD_PATH
+        LD_PATH,
     ]
     for filename in files_to_clean:
         if os.path.exists(filename):
@@ -76,7 +80,8 @@ def write_permuter_settings():
     Write the permuter settings file, comprising the compiler and assembler commands.
     """
     with open("permuter_settings.toml", "w", encoding="utf-8") as f:
-        f.write(f"""compiler_command = "{COMPILE_CMD} -D__GNUC__"
+        f.write(
+            f"""compiler_command = "{COMPILE_CMD} -D__GNUC__"
 assembler_command = "mips-linux-gnu-as -march=r5900 -mabi=eabi -Iinclude"
 compiler_type = "gcc"
 
@@ -84,10 +89,17 @@ compiler_type = "gcc"
 
 [decompme.compilers]
 "tools/build/cc/gcc/gcc" = "ee-gcc2.96"
-""")
+"""
+        )
 
-#MARK: Build
-def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_only=False, dual_objects=False):
+
+# MARK: Build
+def build_stuff(
+    linker_entries: List[LinkerEntry],
+    skip_checksum=False,
+    objects_only=False,
+    dual_objects=False,
+):
     """
     Build the objects and the final ELF file.
     If objects_only is True, only build objects and skip linking/checksum.
@@ -130,7 +142,10 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
                 if obj.suffix in [".s", ".c"]:
                     stem = obj.stem
                 else:
-                    if obj.suffix == ".o" and obj.with_suffix("").suffix in [".s", ".c"]:
+                    if obj.suffix == ".o" and obj.with_suffix("").suffix in [
+                        ".s",
+                        ".c",
+                    ]:
                         stem = obj.with_suffix("").stem
                 target_dir = out_dir if out_dir else obj.parent
                 new_obj = Path(target_dir) / (stem + ".o")
@@ -203,7 +218,7 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
                         "target_path": target_path,
                         "metadata": {
                             "progress_categories": categories,
-                        }
+                        },
                     }
 
                     if has_src:
@@ -219,9 +234,11 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
                         unit["base_path"] = base_path
                     objdiff_units.append(unit)
 
-    ninja = ninja_syntax.Writer(open(str(ROOT / "build.ninja"), "w", encoding="utf-8"), width=9999)
+    ninja = ninja_syntax.Writer(
+        open(str(ROOT / "build.ninja"), "w", encoding="utf-8"), width=9999
+    )
 
-    #MARK: Rules
+    # MARK: Rules
     cross = "mips-linux-gnu-"
 
     ld_args = "-EL -T config/undefined_syms_auto.txt -T config/undefined_funcs_auto.txt -Map $mapfile -T $in -o $out --no-warn-rwx-segments"
@@ -256,7 +273,7 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
         command=f"{cross}objcopy $in $out -O binary",
     )
 
-    #MARK: Build
+    # MARK: Build
     # Build all the objects
     for entry in linker_entries:
         seg = entry.segment
@@ -271,38 +288,116 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
             seg, splat.segtypes.common.data.CommonSegData
         ):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "as")
         elif isinstance(seg, splat.segtypes.common.c.CommonSegC):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "cc", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "cc", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "cc",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "cc",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "cc")
         elif isinstance(seg, splat.segtypes.common.databin.CommonSegDatabin):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "as")
         elif isinstance(seg, splat.segtypes.common.rodatabin.CommonSegRodatabin):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "as")
         elif isinstance(seg, splat.segtypes.common.textbin.CommonSegTextbin):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "as")
         elif isinstance(seg, splat.segtypes.common.bin.CommonSegBin):
             if dual_objects:
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/target", collect_objdiff=True, orig_entry=entry)
-                build(entry.object_path, entry.src_paths, "as", out_dir="obj/current", extra_flags="-DSKIP_ASM")
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/target",
+                    collect_objdiff=True,
+                    orig_entry=entry,
+                )
+                build(
+                    entry.object_path,
+                    entry.src_paths,
+                    "as",
+                    out_dir="obj/current",
+                    extra_flags="-DSKIP_ASM",
+                )
             else:
                 build(entry.object_path, entry.src_paths, "as")
         else:
@@ -334,10 +429,12 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
                     "src/**/*.py",
                     "src/**/*.yml",
                     "src/**/*.txt",
-                    "src/**/*.json"
+                    "src/**/*.json",
                 ],
                 "units": objdiff_units,
-                "progress_categories": [ {"id": id, "name": name} for id, name in CATEGORY_MAP.items() ],
+                "progress_categories": [
+                    {"id": id, "name": name} for id, name in CATEGORY_MAP.items()
+                ],
             }
             with open("objdiff.json", "w", encoding="utf-8") as f:
                 json.dump(objdiff, f, indent=2)
@@ -367,7 +464,8 @@ def build_stuff(linker_entries: List[LinkerEntry], skip_checksum=False, objects_
     else:
         print("Skipping checksum step")
 
-#MARK: Short loop fix
+
+# MARK: Short loop fix
 # Pattern to workaround unintended nops around loops
 COMMENT_PART = r"\/\* (.+) ([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2}) \*\/"
 INSTRUCTION_PART = r"(\b(bne|bnel|beq|beql|bnez|bnezl|beqzl|bgez|bgezl|bgtz|bgtzl|blez|blezl|bltz|bltzl|b)\b.*)"
@@ -376,25 +474,26 @@ OPCODE_PATTERN = re.compile(f"{COMMENT_PART}  {INSTRUCTION_PART}")
 PROBLEMATIC_FUNCS = set(
     [
         "PredictAsegEffect__FP4ASEGffP3ALOT3iP6VECTORP7MATRIX3T6T6", # P2/aseg
-        "ProjectBlipgTransform__FP5BLIPGfi",          # P2/blip
-        "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",       # P2/emitter
-        "ApplyDzg__FP3DZGiPiPPP2SOff",                # P2/dzg
-        "UpdateJtActive__FP2JTP3JOYf",                # P2/jt
-        "AddMatrix4Matrix4__FP7MATRIX4N20",           # P2/mat
-        "FInvertMatrix__FiPfT1",                      # P2/mat
-        "RenderMsGlobset__FP2MSP2CMP2RO",             # P2/ms
-        "BounceRipgRips__FP4RIPG",                    # P2/rip
-        "FUN_001aea70",                               # P2/screen
-        "UpdateShadow__FP6SHADOWf",                   # P2/shadow
-        "LoadShadersFromBrx__FP18CBinaryInputStream", # P2/shd
-        "FillShaders__Fi",                            # P2/shd
-        "UpdateStepPhys__FP4STEP",                    # P2/step
-        "DrawTvBands__FP2TVR4GIFS",                   # P2/tv
-        "FIgnoreUbgIntersection__FP3UBGP2SO",         # P2/ub
-        "PwarpFromOid__F3OIDT0",                      # P2/xform
-        "TriggerWarp__FP4WARP"                        # P2/xform
+        "ProjectBlipgTransform__FP5BLIPGfi",                         # P2/blip
+        "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",                      # P2/emitter
+        "ApplyDzg__FP3DZGiPiPPP2SOff",                               # P2/dzg
+        "UpdateJtActive__FP2JTP3JOYf",                               # P2/jt
+        "AddMatrix4Matrix4__FP7MATRIX4N20",                          # P2/mat
+        "FInvertMatrix__FiPfT1",                                     # P2/mat
+        "RenderMsGlobset__FP2MSP2CMP2RO",                            # P2/ms
+        "BounceRipgRips__FP4RIPG",                                   # P2/rip
+        "FUN_001aea70",                                              # P2/screen
+        "UpdateShadow__FP6SHADOWf",                                  # P2/shadow
+        "LoadShadersFromBrx__FP18CBinaryInputStream",                # P2/shd
+        "FillShaders__Fi",                                           # P2/shd
+        "UpdateStepPhys__FP4STEP",                                   # P2/step
+        "DrawTvBands__FP2TVR4GIFS",                                  # P2/tv
+        "FIgnoreUbgIntersection__FP3UBGP2SO",                        # P2/ub
+        "PwarpFromOid__F3OIDT0",                                     # P2/xform
+        "TriggerWarp__FP4WARP"                                       # P2/xform
     ]
 )
+
 
 def replace_instructions_with_opcodes(asm_folder: Path) -> None:
     """
@@ -422,7 +521,8 @@ def replace_instructions_with_opcodes(asm_folder: Path) -> None:
             with p.open("w") as file:
                 file.write(content)
 
-#MARK: Main
+
+# MARK: Main
 def main():
     """
     Main function, parses arguments and runs the configuration.
@@ -473,7 +573,9 @@ def main():
     linker_entries = split.linker_writer.entries
 
     if do_objects:
-        build_stuff(linker_entries, skip_checksum=True, objects_only=True, dual_objects=True)
+        build_stuff(
+            linker_entries, skip_checksum=True, objects_only=True, dual_objects=True
+        )
     else:
         build_stuff(linker_entries, do_skip_checksum)
 
@@ -481,6 +583,7 @@ def main():
 
     if not args.no_short_loop_workaround:
         replace_instructions_with_opcodes(split.config["options"]["asm_path"])
+
 
 if __name__ == "__main__":
     main()
