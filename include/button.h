@@ -60,7 +60,7 @@ struct BTN
     ALO *paloOwner;
     ASH aash[2];
     float svtAnimation;
-    int fCheckpointed;
+    /* 0x11C */ int fCheckpointed;
     /* 0x120 */ int ichkPushed;
     float tButtons;
     float dtRepush;

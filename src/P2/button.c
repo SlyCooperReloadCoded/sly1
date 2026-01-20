@@ -32,7 +32,32 @@ INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerRsmg__FP2SWiP4RSMGP2LOi);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", RunBtnAsegs__FP3BTN4IASHii);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerBtn__FP3BTNii);
+void TriggerBtn(BTN *pbtn, int fSeekToEnd, int fChkTrigger)
+{
+    if (fChkTrigger)
+        HandleLoSpliceEvent(pbtn->paloOwner, 0x16, 0, NULL);
+    else
+        HandleLoSpliceEvent(pbtn->paloOwner, 2, 0, NULL);
+
+    if (!STRUCT_OFFSET(pbtn, 0x134, int) && !fChkTrigger) // pbtn->fSilent
+    {
+        float sStart = 3000.0f;
+        float sFull = 300.0f;
+        float uVolAtSource = 1.0f;
+        StartSound(SFXID_Click1, 0, pbtn->paloOwner, NULL, sStart, sFull, uVolAtSource, 0.0f,
+                   0.0f, NULL, NULL);
+    }
+
+    RunBtnAsegs(pbtn, IASH_On, fSeekToEnd, fChkTrigger);
+
+    if (!STRUCT_OFFSET(pbtn, 0x13C, int)) // pbtn->fManualReset
+        SetBtnButtons(pbtn, BUTTONS_Pushed);
+
+    if (STRUCT_OFFSET(pbtn, 0x11C, int))                           // pbtn->fCheckpointed
+        SetChkmgrIchk(&g_chkmgr, STRUCT_OFFSET(pbtn, 0x120, int)); // pbtn->ichkPushed
+
+    pbtn->paloOwner->pvtlo->pfnSendLoMessage(pbtn->paloOwner, MSGID_button_trigger, pbtn);
+}
 
 void UntriggerBtn(BTN *pbtn, int fSeekToEnd)
 {
