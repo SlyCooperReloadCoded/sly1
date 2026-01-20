@@ -352,28 +352,26 @@ COMMENT_PART = r"\/\* (.+) ([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2})([0-9A-Z]{2}) 
 INSTRUCTION_PART = r"(\b(bne|bnel|beq|beql|bnez|bnezl|beqzl|bgez|bgezl|bgtz|bgtzl|blez|blezl|bltz|bltzl|b)\b.*)"
 OPCODE_PATTERN = re.compile(f"{COMMENT_PART}  {INSTRUCTION_PART}")
 
-PROBLEMATIC_FUNCS = set(
-    [
-        "PredictAsegEffect__FP4ASEGffP3ALOT3iP6VECTORP7MATRIX3T6T6", # P2/aseg
-        "ProjectBlipgTransform__FP5BLIPGfi",                         # P2/blip
-        "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",                      # P2/emitter
-        "ApplyDzg__FP3DZGiPiPPP2SOff",                               # P2/dzg
-        "UpdateJtActive__FP2JTP3JOYf",                               # P2/jt
-        "AddMatrix4Matrix4__FP7MATRIX4N20",                          # P2/mat
-        "FInvertMatrix__FiPfT1",                                     # P2/mat
-        "RenderMsGlobset__FP2MSP2CMP2RO",                            # P2/ms
-        "BounceRipgRips__FP4RIPG",                                   # P2/rip
-        "FUN_001aea70",                                              # P2/screen
-        "UpdateShadow__FP6SHADOWf",                                  # P2/shadow
-        "LoadShadersFromBrx__FP18CBinaryInputStream",                # P2/shd
-        "FillShaders__Fi",                                           # P2/shd
-        "UpdateStepPhys__FP4STEP",                                   # P2/step
-        "DrawTvBands__FP2TVR4GIFS",                                  # P2/tv
-        "FIgnoreUbgIntersection__FP3UBGP2SO",                        # P2/ub
-        "PwarpFromOid__F3OIDT0",                                     # P2/xform
-        "TriggerWarp__FP4WARP"                                       # P2/xform
-    ]
-)
+PROBLEMATIC_FUNCS = {
+    "PredictAsegEffect__FP4ASEGffP3ALOT3iP6VECTORP7MATRIX3T6T6", # P2/aseg
+    "ProjectBlipgTransform__FP5BLIPGfi",                         # P2/blip
+    "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",                      # P2/emitter
+    "ApplyDzg__FP3DZGiPiPPP2SOff",                               # P2/dzg
+    "UpdateJtActive__FP2JTP3JOYf",                               # P2/jt
+    "AddMatrix4Matrix4__FP7MATRIX4N20",                          # P2/mat
+    "FInvertMatrix__FiPfT1",                                     # P2/mat
+    "RenderMsGlobset__FP2MSP2CMP2RO",                            # P2/ms
+    "BounceRipgRips__FP4RIPG",                                   # P2/rip
+    "FUN_001aea70",                                              # P2/screen
+    "UpdateShadow__FP6SHADOWf",                                  # P2/shadow
+    "LoadShadersFromBrx__FP18CBinaryInputStream",                # P2/shd
+    "FillShaders__Fi",                                           # P2/shd
+    "UpdateStepPhys__FP4STEP",                                   # P2/step
+    "DrawTvBands__FP2TVR4GIFS",                                  # P2/tv
+    "FIgnoreUbgIntersection__FP3UBGP2SO",                        # P2/ub
+    "PwarpFromOid__F3OIDT0",                                     # P2/xform
+    "TriggerWarp__FP4WARP"                                       # P2/xform
+}
 
 
 def replace_instructions_with_opcodes(asm_folder: Path) -> None:
