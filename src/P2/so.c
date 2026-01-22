@@ -49,7 +49,19 @@ void UpdateSo(SO *pso, float dt)
     UpdateAlo(pso, dt);
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/so", SetSoMass__FP2SOf);
+void SetSoMass(SO *pso, float mass)
+{
+    float oldMass = STRUCT_OFFSET(pso, 0x368, float); // pso->mass
+    float massRatio = mass / oldMass;
+
+    // Redundant multiplication needed for match ¯\_(ツ)_/¯
+    float newMass = oldMass * massRatio;
+
+    STRUCT_OFFSET(pso, 0x368, float) = newMass; // Should be pso->mass = mass
+    // Technically newMass != mass due to floating point precision errors
+
+    AdjustSoMomint(pso, massRatio);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/so", AdjustSoMomint__FP2SOf);
 

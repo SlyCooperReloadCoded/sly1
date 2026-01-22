@@ -72,11 +72,41 @@ INCLUDE_ASM("asm/nonmatchings/P2/alarm", DisableAlarmSensors__FP5ALARM);
 
 INCLUDE_ASM("asm/nonmatchings/P2/alarm", NotifyAlarmSensorsOnTrigger__FP5ALARM);
 
-INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmAlbrk__FP5ALARM3OID);
+void AddAlarmAlbrk(ALARM *palarm, OID oid)
+{
+    uint calbrks = STRUCT_OFFSET(palarm, 0x564, int); // palarm->calbrks
 
-INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmSensor__FP5ALARM3OID);
+    if (calbrks < 4) // Max 4 breakable alarms
+    {
+        // Add new breakable object ID to the list
+        STRUCT_OFFSET_INDEX(palarm, 0x568, OID, calbrks) = oid; // palarm->aoidAlbrks[calbrks]
+        STRUCT_OFFSET(palarm, 0x564, int) = calbrks + 1;        // palarm->calbrks
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/alarm", AddAlarmStepguard__FP5ALARM3OID);
+void AddAlarmSensor(ALARM *palarm, OID oid)
+{
+    uint coidSensors = STRUCT_OFFSET(palarm, 0x578, int); // palarm->coidSensors
+
+    if (coidSensors < 16) // Max 16 sensors
+    {
+        // Add new sensor object ID to the list
+        STRUCT_OFFSET_INDEX(palarm, 0x57c, OID, coidSensors) = oid; // palarm->aoidSensors[coidSensors]
+        STRUCT_OFFSET(palarm, 0x578, int) = coidSensors + 1; // palarm->coidSensors
+    }
+}
+
+void AddAlarmStepguard(ALARM *palarm, OID oid)
+{
+    uint coidStepguards = STRUCT_OFFSET(palarm, 0x600, int); // palarm->coidStepguards
+
+    if (coidStepguards < 6) // Max 6 stepguards
+    {
+        // Add new stepguard object ID to the list
+        STRUCT_OFFSET_INDEX(palarm, 0x604, OID, coidStepguards) = oid; // palarm->aoidStepguards[coidStepguards]
+        STRUCT_OFFSET(palarm, 0x600, int) = coidStepguards + 1; // palarm->coidStepguards
+    }
+}
 
 void SetAlarmRsmg(ALARM *palarm, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal)
 {

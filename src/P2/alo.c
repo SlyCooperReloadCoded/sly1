@@ -1,7 +1,10 @@
-#include <alo.h>
 #include <act.h>
-#include <shd.h>
+#include <alo.h>
+#include <aseg.h>
+#include <math.h>
+#include <memory.h>
 #include <shadow.h>
+#include <shd.h>
 #include <target.h>
 
 extern VTACT g_vtactseg;
@@ -156,7 +159,22 @@ INCLUDE_ASM("asm/nonmatchings/P2/alo", SetAloInitialVelocity__FP3ALOP6VECTOR);
 
 INCLUDE_ASM("asm/nonmatchings/P2/alo", SetAloInitialAngularVelocity__FP3ALOP6VECTOR);
 
-INCLUDE_ASM("asm/nonmatchings/P2/alo", PasegdEnsureAlo__FP3ALO);
+ASEGD *PasegdEnsureAlo(ALO *palo)
+{
+    ASEGD *&pasegd = STRUCT_OFFSET(palo, 0x2a0, ASEGD *); // palo->pasegd
+
+    if (!pasegd)
+    {
+        pasegd = (ASEGD *)PvAllocSwClearImpl(sizeof(ASEGD));
+
+        pasegd->oidAseg = OID_Nil;
+        pasegd->iak = IAK_Time;
+        pasegd->tLocal = 0.0f;
+        pasegd->svtLocal = 1.0f;
+    }
+
+    return pasegd;
+}
 
 void SetAloFastShadowRadius(ALO *palo, float sRadius)
 {
@@ -252,25 +270,20 @@ void GetAloCastShadow(ALO *palo, int *pfCastShadow)
     *pfCastShadow = (STRUCT_OFFSET(palo, 0x284, SHADOW *) != (SHADOW *)nullptr);
 }
 
-/**
- * @todo 63.18% match.
- * https://decomp.me/scratch/AqBOS
- */
-INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowShader__FP3ALOP3OID);
-#ifdef SKIP_ASM
 void GetAloShadowShader(ALO *palo, OID *poidShdShadow)
 {
+    // palo->pshadow
     SHADOW *pshadow = STRUCT_OFFSET(palo, 0x284, SHADOW *);
 
-    if (!pshadow || !pshadow->pshd)
+    if (pshadow && pshadow->pshd)
+    {
+        *poidShdShadow = (OID)pshadow->pshd->oid;
+    }
+    else
     {
         *poidShdShadow = OID_Nil;
-        return;
     }
-
-    *poidShdShadow = (OID)(pshadow->pshd->oid);
 }
-#endif // SKIP_ASM
 
 void GetAloShadowNearRadius(ALO *palo, float *psNearRadius)
 {
@@ -296,7 +309,12 @@ void GetAloShadowFarCast(ALO *palo, float *psFarCast)
     *psFarCast = pshadow->sFarCast;
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowConeAngle__FP3ALOPf);
+void GetAloShadowConeAngle(ALO *palo, float *pdegConeAngle)
+{
+    const float RAD_TO_DEG = 57.295776f;
+    SHADOW *pshadow = PshadowInferAlo(palo);
+    *pdegConeAngle = atan2f(pshadow->sNearRadius / pshadow->sNearCast, 1.0f) * RAD_TO_DEG * 2.0f;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/alo", GetAloShadowFrustrumUp__FP3ALOP6VECTOR);
 

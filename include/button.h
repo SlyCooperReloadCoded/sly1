@@ -60,7 +60,7 @@ struct BTN
     ALO *paloOwner;
     ASH aash[2];
     float svtAnimation;
-    int fCheckpointed;
+    /* 0x11C */ int fCheckpointed;
     /* 0x120 */ int ichkPushed;
     float tButtons;
     float dtRepush;
@@ -79,8 +79,13 @@ struct BTN
  * @class VOL_BUTTON
  * @brief Volume button.
  */
-struct VOLBTN
+struct VOLBTN : public SO
 {
+    // ...
+    /* 0x550 */ int coidPush;
+    /* 0x554 */ OID aoidPush[8];
+    //...
+    /* 0x5c0 */ BTN btn;
     // ...
 };
 
@@ -119,7 +124,7 @@ int FAddRsmg(RSMG *arsmg, int crsmgMax, int *pcrsmg, int fOnTrigger, OID oidRoot
 
 void TriggerRsmg(SW *psw, int crsmg, RSMG *arsmg, LO *ploContext, int fTrigger);
 
-void RunBtnAsegs(BTN *pbtn, IASH asht, int fSeekToEnd);
+void RunBtnAsegs(BTN *pbtn, IASH asht, int fSeekToEnd, int fUnknown);
 
 void TriggerBtn(BTN *pbtn, int fSeekToEnd, int fChkTrigger);
 

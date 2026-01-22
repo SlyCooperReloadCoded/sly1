@@ -41,27 +41,18 @@ enum ALTK
 };
 
 /**
- * @class ALARM_BREAKABLE
- * @brief Breakable alarm.
- */
-struct ALBRK : public BRK
-{
-    // ...
-};
-
-/**
  * @class ALARM
  * @brief Alarm object that controls some sensors.
  */
 struct ALARM : public SO
 {
-    ALARMS alarms;
+    /* 0x550 */ ALARMS alarms; // current alarm state
     float tAlarms;
     SM *psm;
     SMA *psma;
     float dtReset;
-    int calbrks;
-    OID aoidAlbrks[4];
+    /* 0x564 */ int calbrks;       // count of breakables
+    /* 0x568 */ OID aoidAlbrks[4]; // array of breakable OIDs
     int coidSensors;
     OID aoidSensors[16];
     int cpsensors;
@@ -74,7 +65,17 @@ struct ALARM : public SO
     int fSilent;
     int crsmg;
     RSMG arsmg[8];
-    int ichkDisabled;
+    /* 0x6b0 */ int ichkDisabled;
+};
+
+/**
+ * @class ALARM_BREAKABLE
+ * @brief Breakable alarm.
+ */
+struct ALBRK : public BRK
+{
+    // ...
+    /* 0x6c0 */ ALARM *palarm;
 };
 
 void BreakAlbrk(ALBRK *palbrk);
@@ -103,10 +104,28 @@ void DisableAlarmSensors(ALARM *palarm);
 
 void NotifyAlarmSensorsOnTrigger(ALARM *palarm);
 
+/**
+ * @brief Adds a breakable alarm object to the alarm's list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the breakable alarm to add (max 4).
+ */
 void AddAlarmAlbrk(ALARM *palarm, OID oid);
 
+/**
+ * @brief Adds a sensor object to the alarm's sensor list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the sensor to add (max 16).
+ */
 void AddAlarmSensor(ALARM *palarm, OID oid);
 
+/**
+ * @brief Adds a stepguard object to the alarm's stepguard list.
+ *
+ * @param palarm Pointer to the alarm.
+ * @param oid Object ID of the stepguard to add (max 6).
+ */
 void AddAlarmStepguard(ALARM *palarm, OID oid);
 
 void SetAlarmRsmg(ALARM *palarm, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal);

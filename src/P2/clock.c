@@ -1,4 +1,5 @@
 #include <clock.h>
+#include <intrinsics.h>
 
 // constants
 static const int CLOCK_FRAMERATE = 60; // 60 FPS
@@ -13,7 +14,6 @@ float g_rtClockPowerUp = 1.0f;
 CLOCK g_clock = { 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0 };
 TICK s_tickLastRaw; // Should be static?
 
-// text
 void SetClockRate(float rt)
 {
     g_rtClock = rt;
@@ -22,55 +22,55 @@ void SetClockRate(float rt)
 
 void MarkClockTick(CLOCK *pclock)
 {
-    const TICK tickFrame = TickNow();
-    const TICK deltaTick = tickFrame - pclock->tickFrame;
-
+    const TICK currentTick = TickNow();
+    const TICK deltaTick = currentTick - pclock->tickFrame;
     float dt = deltaTick * CLOCK_EE_TICK_DURATION;
-    float t1 = CLOCK_FRAMETIME * 2;
-    if (dt < CLOCK_FRAMETIME)
+
+    // Clamp delta time between one and two frames
+    float dtMin = CLOCK_FRAMETIME;
+    float dtMax = CLOCK_FRAMETIME * 2;
+
+    if (dt < dtMin)
     {
-        dt = CLOCK_FRAMETIME;
+        dt = dtMin;
     }
-    else if (t1 < dt)
+    else if (dt > dtMax)
     {
-        dt = t1;
+        dt = dtMax;
     }
 
+    // Store unscaled real delta time
     pclock->dtReal = dt;
+    float dtScaled = pclock->fEnabled ? dt : 0.0f;
+    dtScaled *= g_rtClockPowerUp * g_rtClock;
 
-    float dtFinal = 0.0f;
-    if (pclock->fEnabled)
+    // If scaled delta time is at least one frame, store the scaled value
+    if (dtScaled >= CLOCK_FRAMETIME)
     {
-        dtFinal = dt;
+        pclock->dtReal = dtScaled;
     }
 
-    dtFinal *= g_rtClockPowerUp * g_rtClock;
-
-    if (CLOCK_FRAMETIME <= dtFinal)
-    {
-        pclock->dtReal = dtFinal;
-    }
-
-    pclock->t += dtFinal;
+    // Update clock state
+    pclock->t += dtScaled;
     pclock->dtPrev = pclock->dt;
-    pclock->dt = dtFinal;
+    pclock->dt = dtScaled;
     pclock->tReal += pclock->dtReal;
-    pclock->tickFrame = tickFrame;
+    pclock->tickFrame = currentTick;
 }
 
 void MarkClockTickRealOnly(CLOCK *pclock)
 {
-    const TICK tickFrame = TickNow();
-    const TICK deltaTick = tickFrame - pclock->tickFrame;
+    const TICK currentTick = TickNow();
+    const TICK deltaTick = currentTick - pclock->tickFrame;
     float dt = deltaTick * CLOCK_EE_TICK_DURATION;
 
     pclock->dtReal = dt;
     pclock->tReal += pclock->dtReal;
-    pclock->tickFrame = tickFrame;
+    pclock->tickFrame = currentTick;
 }
 
 void ResetClock(CLOCK *pclock, float t)
-{
+{ 
     pclock->t = t;
 }
 
@@ -81,51 +81,33 @@ void SetClockEnabled(CLOCK *pclock, int fEnabled)
 
 void StartupClock() 
 {
-    // Count is the MIPS DeltaTime, its a 32b value, and is the 9th reg of CoP0. "Count increments automatically every EE cycle." 
-    // https://psi-rockin.github.io/ps2tek/#eecop0timer:~:text=%2409%20%2D%20COP0.Count,every%20EE%20cycle -Zryu
-    ulong ulCountValue;
-    __asm__ volatile ("mfc0 %0, $9" : "=r"(ulCountValue)); // Asm function that puts $9 (c0_count) from CP0 into $a0.
+    ulong cTick = READ_CP0_COUNT();
 
-    s_tickLastRaw = (TICK)ulCountValue; 
+    s_tickLastRaw = (TICK)cTick;
     g_clock.tickFrame = TickNow();
 }
 
 /**
- * Matched 100%.
  * @todo Correct cWrapAround once the bss section of the TU is migrated.
-*/
+ */
 const TICK TickNow()
 {
-    ulong ulCountLow;  // Lower 32 bits of the tick result.
-    ulong ulMask;      // Mask for tick value.
-    ulong ulValue;     // MIPS tick in coprocessor 0 (reg 9 Count)
+    // Read 32-bit CP0 Count register
+    ulong cTick = READ_CP0_COUNT();
 
-    // Get Count from CP0 reg 9
-    __asm__ volatile (
-    "mfc0 %0, $9" : "=r"(ulValue)
-    );
+    // Mask count to ensure clean 32-bit value (likely not necessary)
+    ulong ulMask = 0xFFFFFFFF;
+    cTick = cTick & ulMask;
 
-    // Saving 32b Count value into a 64b var.
-    ulCountLow = ulValue;
-
-    // Taking a 32b value and filling the upper 16b with 0xFFFF, 
-    // then shifting the entire 32b value into the bottom 32b.
-    ulMask = 0xFFFF << 16;
-    ulMask >>= 0x20;
-
-    // Convert to Masked value
-    ulCountLow = ulValue & ulMask;
-
-    // If the 64b value is less than last tick, inc cWrapAround, as the Count value has overflowed.
-    if (ulCountLow < s_tickLastRaw)
+    // Detect wraparound: if count < previous count, the register overflowed
+    if (cTick < s_tickLastRaw)
     {
-        cWrapAround++; // D_0027C000
+        cWrapAround++;
     }
 
-    // Set LastTickRaw, which is the masked 32bit value.
-    s_tickLastRaw = ulCountLow;
+    // Store current count for next wraparound detection
+    s_tickLastRaw = cTick;
 
-    // Put WrapAround value in the upper 32b and ulCountLow in the lower 32b. 
-    // Return the 64b value after preforming an or.
-    return (cWrapAround << 0x20) | ulCountLow;
+    // Combine wraparound count (upper 32 bits) with current count (lower 32 bits)
+    return (cWrapAround << 32) | cTick;
 }

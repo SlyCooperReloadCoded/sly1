@@ -180,7 +180,7 @@ struct SHDF
 {
     /* 0x00 */ uchar shdk;
     /* 0x01 */ uchar grfshd;
-    /* 0x02 */ ushort oid; // ?
+    /* 0x02 */ short oid;
     RGBA rgba;
     RGBA rgbaVolume;
     uint grfzon;

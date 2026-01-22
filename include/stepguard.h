@@ -70,6 +70,9 @@ enum SGS
 struct SGG : public LO
 {
     // ...
+    /* 0x168 */ int calarms;        // count of alarms
+    /* 0x16c */ ALARM **palarms;    // array of alarm pointers
+    // ...
     /* 0x180 */ OID oidSync;
     // ...
 };

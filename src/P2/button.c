@@ -1,5 +1,6 @@
 #include <button.h>
 #include <chkpnt.h>
+#include <stddef.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", PostAshLoad__FP2SWP3ASHP3ALO);
 
@@ -29,11 +30,41 @@ INCLUDE_ASM("asm/nonmatchings/P2/button", FAddRsmg__FP4RSMGiPii3OIDN24);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerRsmg__FP2SWiP4RSMGP2LOi);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", RunBtnAsegs__FP3BTN4IASHi);
+INCLUDE_ASM("asm/nonmatchings/P2/button", RunBtnAsegs__FP3BTN4IASHii);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", TriggerBtn__FP3BTNii);
+void TriggerBtn(BTN *pbtn, int fSeekToEnd, int fChkTrigger)
+{
+    if (fChkTrigger)
+        HandleLoSpliceEvent(pbtn->paloOwner, 0x16, 0, NULL);
+    else
+        HandleLoSpliceEvent(pbtn->paloOwner, 2, 0, NULL);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", UntriggerBtn__FP3BTNi);
+    if (!STRUCT_OFFSET(pbtn, 0x134, int) && !fChkTrigger) // pbtn->fSilent
+    {
+        float sStart = 3000.0f;
+        float sFull = 300.0f;
+        float uVolAtSource = 1.0f;
+        StartSound(SFXID_Click1, 0, pbtn->paloOwner, NULL, sStart, sFull, uVolAtSource, 0.0f,
+                   0.0f, NULL, NULL);
+    }
+
+    RunBtnAsegs(pbtn, IASH_On, fSeekToEnd, fChkTrigger);
+
+    if (!STRUCT_OFFSET(pbtn, 0x13C, int)) // pbtn->fManualReset
+        SetBtnButtons(pbtn, BUTTONS_Pushed);
+
+    if (STRUCT_OFFSET(pbtn, 0x11C, int))                           // pbtn->fCheckpointed
+        SetChkmgrIchk(&g_chkmgr, STRUCT_OFFSET(pbtn, 0x120, int)); // pbtn->ichkPushed
+
+    pbtn->paloOwner->pvtlo->pfnSendLoMessage(pbtn->paloOwner, MSGID_button_trigger, pbtn);
+}
+
+void UntriggerBtn(BTN *pbtn, int fSeekToEnd)
+{
+    HandleLoSpliceEvent(pbtn->paloOwner, 3, 0, NULL); // untrigger event
+    RunBtnAsegs(pbtn, IASH_Off, fSeekToEnd, 0);
+    pbtn->paloOwner->pvtlo->pfnSendLoMessage(pbtn->paloOwner, MSGID_button_untrigger, pbtn);
+}
 
 void InitButton(BUTTON *pbutton)
 {
@@ -105,7 +136,12 @@ INCLUDE_ASM("asm/nonmatchings/P2/button", AddButtonPushClass__FP6BUTTON3CID);
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", AddButtonNoPushClass__FP6BUTTON3CID);
 
-INCLUDE_ASM("asm/nonmatchings/P2/button", AddVolbtnPushObject__FP6VOLBTN3OID);
+void AddVolbtnPushObject(VOLBTN *pvolbtn, OID oid)
+{
+    int coidPush = STRUCT_OFFSET(pvolbtn, 0x550, int);        // pvolbtn->coidPush
+    STRUCT_OFFSET_INDEX(pvolbtn, 0x554, OID, coidPush) = oid; // pvolbtn->aoidPush[coidPush]
+    STRUCT_OFFSET(pvolbtn, 0x550, int) = coidPush + 1;        // pvolbtn->coidPush
+}
 
 void SetButtonRsmg(BUTTON *pbutton, int fOnTrigger, OID oidRoot, OID oidSM, OID oidGoal)
 {
