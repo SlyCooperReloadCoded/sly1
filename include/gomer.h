@@ -26,6 +26,7 @@ enum GOMERS
 struct GOMER : public STEPGUARD
 {
     // ...
+    /* 0xc40 */ int fAbandonExternal;
 };
 
 #endif // GOMER_H

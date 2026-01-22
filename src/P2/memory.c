@@ -143,12 +143,12 @@ void FreeStackImpl()
 
 void *malloc(uint __size)
 {
-    return (void *)0x0;
+    return nullptr;
 }
 
 void *_malloc_r(_reent *pre, uint __size)
 {
-    return (void *)0x0;
+    return nullptr;
 }
 
 void free(void *pv)

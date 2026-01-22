@@ -1,10 +1,17 @@
 #include <tv.h>
+#include <clock.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/tv", InitTv__FP2TV5BLOTK);
 
 INCLUDE_ASM("asm/nonmatchings/P2/tv", PostTvLoad__FP2TV);
 
-INCLUDE_ASM("asm/nonmatchings/P2/tv", GetTvItvbMinMax__FP2TVPiT1);
+void GetTvItvbMinMax(TV *ptv, int *pitvbDrawMin, int *pitvbDrawMax)
+{
+    // ptv->uUnwind
+    int max = (int)(STRUCT_OFFSET(ptv, 0xc70, float) * 57.0f);
+    *pitvbDrawMin = (0x39 - max) / 2;
+    *pitvbDrawMax = *pitvbDrawMin + max;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/tv", DrawTvArea__FP2TVR4GIFSi);
 
@@ -14,7 +21,17 @@ INCLUDE_ASM("asm/nonmatchings/P2/tv", DrawTvOutline__FP2TVR4GIFS);
 
 INCLUDE_ASM("asm/nonmatchings/P2/tv", DrawTv__FP2TV);
 
-INCLUDE_ASM("asm/nonmatchings/P2/tv", SetTvTvs__FP2TV3TVS);
+void SetTvTvs(TV *ptv, TVS tvs)
+{
+    // ptv->tvs
+    if (tvs == STRUCT_OFFSET(ptv, 0x260, TVS))
+    {
+        return;
+    }
+
+    STRUCT_OFFSET(ptv, 0x260, TVS) = tvs; // ptv->tvs
+    STRUCT_OFFSET(ptv, 0x264, float) = g_clock.tReal; // ptv->tTvs
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/tv", AcceptTvSpeaker__FP2TV);
 

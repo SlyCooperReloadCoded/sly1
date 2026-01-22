@@ -32,8 +32,25 @@ INCLUDE_ASM("asm/nonmatchings/P2/dartgun", AgeDartgunStuckDart__FP7DARTGUN);
 
 INCLUDE_ASM("asm/nonmatchings/P2/dartgun", PratGetDartgunRatTarget__FP7DARTGUN);
 
-INCLUDE_ASM("asm/nonmatchings/P2/dartgun", AddDartgunRatTarget__FP7DARTGUN3OID);
+/**
+ * @todo Cleanup once struct is implemented.
+ */
+void AddDartgunRatTarget(DARTGUN *pdartgun, OID oid)
+{
+    if (STRUCT_OFFSET(pdartgun, 0x744, uint) >= 8)
+    {
+        return;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/P2/dartgun", StartDartgunTargetAreaChange__FP7DARTGUN);
+    // pdartgun->aoidRatTarget[pdartgun->coidRatTarget++] = oid;
+    OID *aoidRatTarget = &STRUCT_OFFSET(pdartgun, 0x748, OID);
+    aoidRatTarget[STRUCT_OFFSET(pdartgun, 0x744, uint)++] = oid;
+}
+
+void StartDartgunTargetAreaChange(DARTGUN *pdartgun)
+{
+    STRUCT_OFFSET(pdartgun, 0x78c, int) = 0; // pdartgun->cpratInTargetArea
+    STRUCT_OFFSET(pdartgun, 0x7b0, int) = 0; // pdartgun->fJtInTargetArea
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/dartgun", AddDartgunTargetAreaTarget__FP7DARTGUNP3ALO);
