@@ -9,7 +9,7 @@ void LoadPntFromBrx(PNT *ppnt, CBinaryInputStream *pbis)
 
 void GetPntPos(PNT *ppnt, VECTOR *ppos)
 {
-    ConvertAloPos(ppnt->paloParent, (ALO *)nullptr, &ppnt->posLocal, ppos);
+    ConvertAloPos(ppnt->paloParent, NULL, &ppnt->posLocal, ppos);
 }
 
 void SetPntParent(PNT *ppnt, ALO *paloParent)
@@ -20,7 +20,7 @@ void SetPntParent(PNT *ppnt, ALO *paloParent)
 
 void ApplyPntProxy(PNT *ppnt, PROXY *pproxyApply)
 {
-    ConvertAloPos((ALO *)pproxyApply, (ALO *)nullptr, &ppnt->posLocal, &ppnt->posLocal);
+    ConvertAloPos((ALO *)pproxyApply, NULL, &ppnt->posLocal, &ppnt->posLocal);
 }
 
 /**

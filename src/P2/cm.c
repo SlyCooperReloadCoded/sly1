@@ -45,7 +45,7 @@
 // float D_00261988 = 250.0f;
 // float D_0026198C = 0.0f;
 
-// CM* g_pcm = (CM *)0x0;
+// CM* g_pcm = NULL;
 
 void StartupCm()
 {
@@ -95,12 +95,12 @@ INCLUDE_ASM("asm/nonmatchings/P2/cm", FUN_001438d8);
 
 void SetCmPos(CM *pcm, VECTOR *ppos)
 {
-    SetCmPosMat(pcm, ppos, 0x0);
+    SetCmPosMat(pcm, ppos, NULL);
 }
 
 void SetCmMat(CM *pcm, MATRIX3 *pmat)
 {
-    SetCmPosMat(pcm, 0x0, pmat);
+    SetCmPosMat(pcm, NULL, pmat);
 }
 
 void SetCmFov(CM *pcm, float fov)

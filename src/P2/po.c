@@ -66,7 +66,7 @@ PO *PpoCur()
 {
     if (g_ippoCur < 0)
     {
-        return (PO *)nullptr;
+        return NULL;
     }
 
 	return g_appo[g_ippoCur];

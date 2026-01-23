@@ -133,7 +133,7 @@ INCLUDE_ASM("asm/nonmatchings/P2/so", SetSoSphere__FP2SOf);
 
 void SetSoNoInteract(SO *pso, int fNoInteract)
 {
-    SetSoConstraints(pso, CT_Locked, (VECTOR *)nullptr, CT_Locked, (VECTOR *)nullptr);
+    SetSoConstraints(pso, CT_Locked, NULL, CT_Locked, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/so", ConstrFromCnstr__F5CNSTRP2CTP6VECTOR);

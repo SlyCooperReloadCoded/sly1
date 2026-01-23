@@ -70,7 +70,7 @@ void *PvAllocSwImpl(int cb)
 {
     if (cb == 0)
     {
-        return nullptr;
+        return NULL;
     }
 
     CheckForOutOfMemory();
@@ -116,7 +116,7 @@ void *PvAllocStackImpl(int cb)
 {
     if (cb == 0)
     {
-        return nullptr;
+        return NULL;
     }
 
     CheckForOutOfMemory();
@@ -143,12 +143,12 @@ void FreeStackImpl()
 
 void *malloc(uint __size)
 {
-    return nullptr;
+    return NULL;
 }
 
 void *_malloc_r(_reent *pre, uint __size)
 {
-    return nullptr;
+    return NULL;
 }
 
 void free(void *pv)

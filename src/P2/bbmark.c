@@ -7,7 +7,7 @@ INCLUDE_ASM("asm/nonmatchings/P2/bbmark", UpdateSwPox__FP2SWP3OXAT1UcUc);
 OX *PoxAddSw(SW *psw, OXA *poxa, OXA *poxaOther)
 {
     OX *pox = (OX *)PvAllocSlotheapImpl(&psw->slotheapOx);
-    pox->pxp = (XP *)nullptr;
+    pox->pxp = NULL;
     pox->psoOther = poxaOther->pso;
     pox->poxNext = poxa->pox;
     poxa->pox = pox;
@@ -21,7 +21,7 @@ INCLUDE_ASM("asm/nonmatchings/P2/bbmark", PoxFromSoSo__FP2SOT0);
 XP *PxpFirstFromSoSo(SO *pso, SO *psoOther)
 {
     OX *pox = PoxFromSoSo(pso, psoOther);
-    return pox ? pox->pxp : (XP *)nullptr;
+    return pox ? pox->pxp : NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/bbmark", AddSwAaobrObject__FP2SWP2SO);

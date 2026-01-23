@@ -10,7 +10,7 @@ INCLUDE_ASM("asm/nonmatchings/P2/break", CloneBrk__FP3BRKT0);
 void PostBrkLoad(BRK *pbrk)
 {
     PostAloLoad((ALO *)pbrk);
-    PostSwCallback(pbrk->psw, PostBrkLoadCallbackHookup, pbrk, MSGID_callback, nullptr);
+    PostSwCallback(pbrk->psw, PostBrkLoadCallbackHookup, pbrk, MSGID_callback, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/break", PostBrkLoadCallbackHookup__FP3BRK5MSGIDPv);

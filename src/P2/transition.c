@@ -9,7 +9,7 @@
 
 CTransition::CTransition()
 {
-    m_pchzWorld = (char*)nullptr;
+    m_pchzWorld = NULL;
     grftrans = FTRANS_None;
     m_oidWarp = OID_Nil;
     m_oidWarpContext = OID_Nil;

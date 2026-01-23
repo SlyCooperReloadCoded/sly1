@@ -97,7 +97,7 @@ void UpdateJtActivePowerUp(JT *pjt, JOY *pjoy)
     {
     case FSP_Dive:
         // Only rotate if JT is rushing or ledge grabbing.
-        if (g_pjt == nullptr
+        if (g_pjt == NULL
             || g_pjt->jts != JTS_Rush
             || !g_pjt->jts == JTS_Jump && g_pjt->jtbs == (JTBS)0x8)
         {
@@ -110,7 +110,7 @@ void UpdateJtActivePowerUp(JT *pjt, JOY *pjoy)
         break;
     case FSP_Ball:
         // Only rotate if JT is not rolling.
-        if (g_pjt != nullptr
+        if (g_pjt != NULL
             && !(g_pjt->jts == JTS_Ball && g_pjt->jtbs == (JTBS)0xd))
             {
                 fcanRotate = true;
@@ -152,7 +152,7 @@ void UpdateJtActivePowerUp(JT *pjt, JOY *pjoy)
     }
 
     // Disallow rotating if JT status is Zap or binoc is showing.
-    if (g_pjt != nullptr && g_pjt->jts == JTS_Zap)
+    if (g_pjt != NULL && g_pjt->jts == JTS_Zap)
         fcanRotate = false;
 
     if (g_binoc.blots != BLOTS_Hidden)
@@ -234,7 +234,7 @@ void UpdateJtActivePowerUp(JT *pjt, JOY *pjoy)
     case FSP_Mine:
         if (pjt->jts < (JTS)2
             && JOY_BUTTON_PRESSED(pjoy, PAD_TRIANGLE)
-            && STRUCT_OFFSET(pjt, 0x1518, LO *) != nullptr)
+            && STRUCT_OFFSET(pjt, 0x1518, LO *) != NULL)
         {
             SetJoyBtnHandled(pjoy, PAD_TRIANGLE);
             LO *ploMine = STRUCT_OFFSET(pjt, 0x1518, LO *);

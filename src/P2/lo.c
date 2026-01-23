@@ -21,7 +21,7 @@ void InitLo(LO *plo)
 
 void PostLoLoad(LO *plo)
 {
-    HandleLoSpliceEvent(plo, 0, 0, (void **)nullptr);
+    HandleLoSpliceEvent(plo, 0, 0, NULL);
 }
 
 void AddLo(LO *plo)
@@ -128,7 +128,7 @@ int FFindLoParent(LO *plo, ALO *paloParent)
         plo = plo->paloParent;
     }
 
-    return (paloParent == nullptr);
+    return (paloParent == NULL);
 }
 
 void SetLoParent(LO *plo, ALO *paloParent)
@@ -239,7 +239,7 @@ void UnsubscribeSwPpmqStruct(SW *psw, MQ **ppmqFirst, PFNMQ pfnmq, void *pvConte
         if (pmq->pfnmq == pfnmq && pmq->pvContext == pvContext)
         {
             *ppmqFirst = pmq->pmqNext;
-            pmq->pmqNext = (MQ*)nullptr;
+            pmq->pmqNext = NULL;
             pmqTarget = pmq;
             FreeSwMqList(psw, pmqTarget);
             break;

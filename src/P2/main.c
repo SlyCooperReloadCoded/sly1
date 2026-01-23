@@ -76,7 +76,7 @@ static SFN s_asfn[29] =
  * @todo Are these the right way around?
  */
 int g_cpchzArgs = 0;
-char **g_apchzArgs = (char **)nullptr;
+char **g_apchzArgs = NULL;
 
 /**
  * @brief Main function.

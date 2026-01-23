@@ -32,7 +32,7 @@ void GLBS::FindLights(VECTOR *ppos, float sRadius)
 
 void GLBS::ResetStrip()
 {
-    m_pshd = (SHD *)nullptr;
+    m_pshd = NULL;
     m_cvtxg = 0;
     memset(m_avtxg, 0, 148 * sizeof(VTXG));
 }

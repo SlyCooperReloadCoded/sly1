@@ -6,6 +6,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <stddef.h>
+
 // Exact-width integers (don't use these in most cases)
 typedef signed char      int8_t;
 typedef short            int16_t;
@@ -31,7 +33,6 @@ typedef ulong   undefined8;
 
 // Misc
 typedef uchar byte;
-#define nullptr (void *)0x0
 typedef union QW;
 
 #endif // TYPES_H

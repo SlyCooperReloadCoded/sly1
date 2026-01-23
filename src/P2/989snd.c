@@ -4,8 +4,6 @@
 #include <sdk/ee/sifrpc.h>
 #include <sdk/libcdvd.h>
 
-#include <stddef.h>
-
 #include <common.h>
 #include <text.h>
 

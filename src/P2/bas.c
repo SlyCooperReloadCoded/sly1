@@ -8,8 +8,8 @@ CBinaryAsyncStream::CBinaryAsyncStream(void *pvSpool)
     m_isector = 0;
     m_abSpool = (byte *)(((int)pvSpool + 0x3f) & ~0x3f);
     m_fd = -1;
-    m_pbSpooling = (byte *)nullptr;
-    m_pb = (byte *)nullptr;
+    m_pbSpooling = NULL;
+    m_pb = NULL;
     m_cbFile = 0;
     m_cbUnspooled = 0;
     m_cbSpooling = 0;

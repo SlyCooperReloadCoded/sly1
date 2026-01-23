@@ -12,7 +12,7 @@ void OnTnRemove(TN *ptn)
 {
     OnAloRemove(ptn);
     SetTnTns(ptn, TNS_Out);
-    ClearSwCallbacks(ptn->psw, 2, (PFNMQ)nullptr, ptn, MSGID_Nil, nullptr);
+    ClearSwCallbacks(ptn->psw, 2, NULL, ptn, MSGID_Nil, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/tn", LoadTnFromBrx__FP2TNP18CBinaryInputStream);
@@ -36,7 +36,7 @@ void FUN_001e2840(TN *ptn, TNS tns)
     }
 
     STRUCT_OFFSET(ptn, 0x398, TNS) = tns;
-    UpdateTnCallback(ptn, MSGID_callback, nullptr);
+    UpdateTnCallback(ptn, MSGID_callback, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/tn", UpdateTnCallback__FP2TN5MSGIDPv);
@@ -46,7 +46,7 @@ void UpdateTn(TN *ptn, float dt)
     UpdateAlo(ptn, dt);
     if (STRUCT_OFFSET(ptn, 0x398, TNS) != TNS_Out) // ptn->tns
     {
-        PostSwCallback(ptn->psw, UpdateTnCallback, ptn, MSGID_callback, nullptr);
+        PostSwCallback(ptn->psw, UpdateTnCallback, ptn, MSGID_callback, NULL);
     }
 }
 

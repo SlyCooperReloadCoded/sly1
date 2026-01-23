@@ -25,13 +25,13 @@ INCLUDE_ASM("asm/nonmatchings/P2/aseg", ApplyAsegOvr__FP4ASEGP3ALOiP3OVRffiPP5AS
 
 void ApplyAseg(ASEG *paseg, ALO *paloAsegRoot, float tLocal, float svtLocal, GRFAPL grfapl, ASEGA **ppasega)
 {
-    ApplyAsegOvr(paseg, paloAsegRoot, 0, (OVR *)nullptr, tLocal, svtLocal, grfapl, ppasega);
+    ApplyAsegOvr(paseg, paloAsegRoot, 0, NULL, tLocal, svtLocal, grfapl, ppasega);
 }
 
 ASEGA *PasegaApplyAseg(ASEG *paseg, ALO *paloAsegRoot, float tLocal, float svtLocal, GRFAPL grfapl)
 {
     ASEGA *pasega;
-    ApplyAsegOvr(paseg, paloAsegRoot, 0, (OVR *)nullptr, tLocal, svtLocal, grfapl, &pasega);
+    ApplyAsegOvr(paseg, paloAsegRoot, 0, NULL, tLocal, svtLocal, grfapl, &pasega);
     return pasega;
 }
 
@@ -51,7 +51,7 @@ void ApplyAsegCur(ASEG *paseg, ALO *paloRoot, float t, float svt, GRFAPL grfapl,
     if (*ppasega)
     {
         RetractAsega(*ppasega);
-        *ppasega = (ASEGA *)nullptr;
+        *ppasega = NULL;
     }
     if (paseg)
     {

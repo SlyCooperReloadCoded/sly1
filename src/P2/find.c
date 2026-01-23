@@ -72,5 +72,5 @@ ALO *PaloFindLoCommonParent(LO *plo, LO *ploOther)
         plo = (LO *)plo->paloParent;
     }
 
-    return (ALO *)nullptr;
+    return NULL;
 }

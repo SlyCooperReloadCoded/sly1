@@ -19,7 +19,7 @@ void InitJlo(JLO *pjlo)
     STRUCT_OFFSET(psmp, 0x04, float) = 0.0f; // pjlo->smpSpin.svSlow
     STRUCT_OFFSET(psmp, 0x08, float) = 0.25f; // pjlo->smpSpin.dtFast
 
-    g_pjloCur = (JLO *)nullptr;
+    g_pjloCur = NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/jlo", LoadJloFromBrx__FP3JLOP18CBinaryInputStream);
@@ -66,7 +66,7 @@ void ActivateJlo(JLO *pjlo)
 
 void DeactivateJlo(JLO *pjlo)
 {
-    g_pjloCur = (JLO *)nullptr;
+    g_pjloCur = NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/jlo", InitJloc__FP4JLOC);

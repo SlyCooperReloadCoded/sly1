@@ -49,6 +49,6 @@ void FreezeSmartguard(SMARTGUARD *psmartguard, int fFreeze)
     {
         // psmartguard->pexcSneak
         UnsetExcitement(STRUCT_OFFSET(psmartguard, 0xcc0, EXC *));
-        STRUCT_OFFSET(psmartguard, 0xcc0, EXC *) = (EXC *)nullptr;
+        STRUCT_OFFSET(psmartguard, 0xcc0, EXC *) = NULL;
     }
 }

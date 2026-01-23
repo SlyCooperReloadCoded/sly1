@@ -47,7 +47,7 @@ void SetSensorSensors(SENSOR *psensor, SENSORS sensors)
 		}
 	}
 
-	HandleLoSpliceEvent(psensor, 2, 0, (void **)0);
+	HandleLoSpliceEvent(psensor, 2, 0, NULL);
 	STRUCT_OFFSET(psensor, 0x558, SENSORS) = sensors; // psensor->sensors = sensors;
 	STRUCT_OFFSET(psensor, 0x55C, float) = g_clock.t;
 }

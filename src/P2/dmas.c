@@ -28,15 +28,15 @@ DMAS::DMAS()
 
 void DMAS::Clear()
 {
-    m_pbMax = (uchar *)nullptr;
-    m_ab = (uchar *)nullptr;
-    m_pqwCnt = (QW *)nullptr;
-    m_pb = (uchar *)nullptr;
+    m_pbMax = NULL;
+    m_ab = NULL;
+    m_pqwCnt = NULL;
+    m_pb = NULL;
 }
 
 void DMAS::Reset()
 {
-    m_pqwCnt = (QW *)nullptr;
+    m_pqwCnt = NULL;
     m_pb = m_ab;
 }
 
