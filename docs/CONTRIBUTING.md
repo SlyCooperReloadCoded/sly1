@@ -63,7 +63,7 @@ Once you have a function selected, you can start matching it using either **Objd
 3. Under "Diff label", enter the name of the function.
 4. Find the `.s` file of the function you want to match in the `asm/nonmatchings` folder. Copy the contents of the file into the "Target assembly" box.
 5. If the function references any other  functions, global variables, or data types, copy those from the relevant headers into the "Context" box.
-   * E.g. For the function `void ResetClock(struct CLOCK* pclock, float t)`, you will need to include the definition of `CLOCK` struct, as well as the `TICK` datatype since it is used in the CLOCK struct.
+   * E.g. For the function `void ResetClock(struct CLOCK* pclock, float t)`, you will need to include the definition of `CLOCK` struct, as well as the `TICK` datatype since it is used in the `CLOCK` struct.
 6. Click "Create scratch".
 7. **(Recommended)** Go to the "Options" tab and under "Debug information" select `-g3 (Macro expansions)`. This will show you which line numbers the source code correspond to each line in the assembly.
 
