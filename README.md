@@ -120,7 +120,7 @@ To build the project, you will need to extract the original ELF file from your o
 Install Python 3.9 or higher, pip and venv:
 
 ```bash
-sudo apt-get install python3 python3-pip python3-venv
+sudo apt install python3 python3-pip python3-venv
 ```
 
 Create a Python environment for the project:
@@ -147,8 +147,8 @@ Install 32 bit MIPS assembler and Wine:
 
 ```bash
 sudo dpkg --add-architecture i386
-sudo apt-get update
-sudo apt-get install binutils-mips-linux-gnu wine32
+sudo apt update
+sudo apt install binutils-mips-linux-gnu wine32
 ```
 
 > **Note:** For a lighter and faster alternative to Wine, download [`wibo-i686`](https://github.com/decompals/wibo/releases/) to the `tools` directory.
@@ -156,7 +156,7 @@ sudo apt-get install binutils-mips-linux-gnu wine32
 Install Ninja build system:
 
 ```bash
-sudo apt-get install ninja-build
+sudo apt install ninja-build
 ```
 
 Setup the compiler using the provided script:
