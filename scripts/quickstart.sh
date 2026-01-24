@@ -3,10 +3,12 @@ set -e
 
 ### Install Dependencies ###
 
-PACKAGES="binutils-mips-linux-gnu ninja-build python3 python3-pip python3-venv wine32"
+PACKAGES="binutils-mips-linux-gnu ninja-build python3 python3-pip python3-venv"
 ISO_ARG="$1"
 PROJECT_DIR="$(dirname "$0")/.."
 DISC_DIR="$PROJECT_DIR/disc"
+TOOLS_DIR="$PROJECT_DIR/tools"
+WIBO_URL="https://github.com/decompals/wibo/releases/download/1.0.0/wibo-i686"
 
 # If no ISO specified, look for one in the disc directory
 if [ -z "$ISO_ARG" ] && [ ! -f $PROJECT_DIR/disc/SCUS_971.98 ]; then
@@ -28,6 +30,17 @@ if [ -n "$ISO_ARG" ]; then
 	fi
 	ISO_ARG="$(realpath "$ISO_ARG")"
     PACKAGES="$PACKAGES libarchive-tools"
+fi
+
+# Download Wibo
+WIBO_PATH="$TOOLS_DIR/wibo-i686"
+echo "Downloading Wibo..."
+mkdir -p "$TOOLS_DIR"
+if wget -q -O "$WIBO_PATH" "$WIBO_URL"; then
+	chmod +x "$WIBO_PATH"
+else
+	echo "Wibo download failed, adding wine32 to dependencies instead..."
+	PACKAGES="$PACKAGES wine32"
 fi
 
 # Install missing dependencies

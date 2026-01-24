@@ -143,13 +143,16 @@ pip3 install -U -r requirements.txt
 
 ### 4. Setup build environment
 
-Install 32 bit Wine and MIPS assembler:
+Install 32 bit MIPS assembler and Wine:
 
 ```bash
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install wine32 binutils-mips-linux-gnu
+sudo apt-get install binutils-mips-linux-gnu wine32
 ```
+
+> **Note:** For a lighter and faster alternative to Wine, download [`wibo-i686`](https://github.com/decompals/wibo/releases/) to the `tools` directory.
+
 Install Ninja build system:
 
 ```bash

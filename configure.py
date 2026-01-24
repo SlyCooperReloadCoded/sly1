@@ -37,12 +37,13 @@ COMMON_COMPILE_FLAGS = (
     f"-x c++ -B{TOOLS_DIR}/cc/lib/gcc-lib/ee/2.95.2/ -O2 -G0 -ffast-math"
 )
 
-WINE = "WINEDEBUG=-all wine"
+WIBO = TOOLS_DIR / "wibo-i686"
+WINECMD = f"{WIBO}" if WIBO.exists() else "WINEDEBUG=-all wine"
 
 COMPILE_CMD = f"{CC_DIR}/ee-gcc.exe -c {COMMON_INCLUDES} {COMMON_COMPILE_FLAGS} $in"
 if sys.platform == "linux":
     COMPILE_CMD = (
-        f"{WINE} {CC_DIR}/ee-gcc.exe -c {COMMON_INCLUDES} {COMMON_COMPILE_FLAGS} $in"
+        f"{WINECMD} {CC_DIR}/ee-gcc.exe -c {COMMON_INCLUDES} {COMMON_COMPILE_FLAGS} $in"
     )
 
 CATEGORY_MAP = {
