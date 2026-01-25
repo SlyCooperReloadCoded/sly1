@@ -55,6 +55,8 @@ New contributors are welcome to make a pull request! If you would like to help b
 
 You can quickly setup the project on Debian-based systems such as Ubuntu (or WSL) using the quickstart script. Follow these three steps to get started:
 
+> **NOTE:** You can follow along on other distros by using the [Distrobox Guide](./docs/DISTROBOX.md) to set up a Debian container.
+
 ### 1. Clone the repo
 
 ```bash
