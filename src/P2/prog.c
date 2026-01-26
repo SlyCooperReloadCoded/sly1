@@ -105,7 +105,7 @@ void CProg::Draw() {
     gifs.AddPrimEnd();
     gifs.AddDmaEnd();
     gifs.EndDmaCnt();
-    gifs.Detach(0x0, 0x0);
+    gifs.Detach(NULL, NULL);
     BlastAqwGifsBothFrames(aqwProgress);
 }
 #endif

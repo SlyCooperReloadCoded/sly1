@@ -76,7 +76,7 @@ void DoUbgFreefallLanding(UBG *pubg)
     // pubg->oidPatrolGoal & pubg->sgs
     if (STRUCT_OFFSET(pubg, 0xc58, OID) == OID_state_ubb_round_2 &&
         STRUCT_OFFSET(pubg, 0x724, SGS) == SGS_Pursue &&
-        PxpFindSoGround(pubg, (SO *)nullptr, (int *)nullptr))
+        PxpFindSoGround(pubg, NULL, NULL))
     {
         SO *pso = PsoPadUbgClosest(pubg, &STRUCT_OFFSET(pubg, 0x140, VECTOR));
 

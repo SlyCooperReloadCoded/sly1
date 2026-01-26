@@ -4,7 +4,7 @@
 void InitBarrier(BARRIER *pbarrier)
 {
     InitSo(pbarrier);
-    SetSoConstraints(pbarrier, CT_Locked, (VECTOR *)nullptr, CT_Locked, (VECTOR *)nullptr);
+    SetSoConstraints(pbarrier, CT_Locked, NULL, CT_Locked, NULL);
     STRUCT_OFFSET(pbarrier, 0x590, OID) = OID_Nil; // pbarrier->barwarp.oidWarp
 }
 

@@ -267,7 +267,7 @@ SHADOW *PshadowInferAlo(ALO *palo)
 void GetAloCastShadow(ALO *palo, int *pfCastShadow)
 {
     // palo->pshadow
-    *pfCastShadow = (STRUCT_OFFSET(palo, 0x284, SHADOW *) != (SHADOW *)nullptr);
+    *pfCastShadow = (STRUCT_OFFSET(palo, 0x284, SHADOW *) != NULL);
 }
 
 void GetAloShadowShader(ALO *palo, OID *poidShdShadow)

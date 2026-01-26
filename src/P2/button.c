@@ -1,6 +1,5 @@
 #include <button.h>
 #include <chkpnt.h>
-#include <stddef.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/button", PostAshLoad__FP2SWP3ASHP3ALO);
 
@@ -44,7 +43,7 @@ void TriggerBtn(BTN *pbtn, int fSeekToEnd, int fChkTrigger)
         float sStart = 3000.0f;
         float sFull = 300.0f;
         float uVolAtSource = 1.0f;
-        StartSound(SFXID_Click1, 0, pbtn->paloOwner, NULL, sStart, sFull, uVolAtSource, 0.0f,
+        StartSound(SFXID_Click1, NULL, pbtn->paloOwner, NULL, sStart, sFull, uVolAtSource, 0.0f,
                    0.0f, NULL, NULL);
     }
 

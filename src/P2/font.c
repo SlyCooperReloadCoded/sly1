@@ -2,7 +2,7 @@
 
 void StartupFont()
 {
-    g_pfont = (CFont *)nullptr;
+    g_pfont = NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", FUN_0015c188);

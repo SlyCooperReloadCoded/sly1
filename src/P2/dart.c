@@ -38,7 +38,7 @@ void HandleDartMessage(DART *pdart, MSGID msgid, void *pv)
     // pdart->pasegaSticking
     if (msgid == MSGID_asega_retracted && (ASEGA *)pv == STRUCT_OFFSET(pdart, 0x578, ASEGA *))
     {
-        STRUCT_OFFSET(pdart, 0x578, ASEGA *) = (ASEGA *)nullptr;
+        STRUCT_OFFSET(pdart, 0x578, ASEGA *) = NULL;
         SetDartDarts(pdart, DARTS_Stuck);
     }
 }
@@ -91,10 +91,10 @@ void SetDartDarts(DART *pdart, DARTS darts)
 
     if (STRUCT_OFFSET(pdart, 0x550, DARTS) == DARTS_Airborne)
     {
-        STRUCT_OFFSET(pdart, 0x57c, ALO *) = (ALO *)nullptr; // pdart->paloTarget
+        STRUCT_OFFSET(pdart, 0x57c, ALO *) = NULL; // pdart->paloTarget
         STRUCT_OFFSET(pdart, 0x580, float) = 0.0f; // pdart->dtLaunchToTarget
         STRUCT_OFFSET(pdart, 0x584, float) = 0.0f; // pdart->dzTarget
-        STRUCT_OFFSET(pdart, 0x588, DARTGUN *) = (DARTGUN *)nullptr; // pdart->pdartgunFiredFrom
+        STRUCT_OFFSET(pdart, 0x588, DARTGUN *) = NULL; // pdart->pdartgunFiredFrom
     }
 
     STRUCT_OFFSET(pdart, 0x550, DARTS) = darts; // pdart->darts

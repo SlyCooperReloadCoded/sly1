@@ -8,7 +8,7 @@ void PostSmLoad(SM *psm)
     PostLoLoad(psm);
     if (psm->fDefault)
     {
-        PostSwCallback(psm->psw, PostSmLoadCallback, psm, MSGID_callback, nullptr);
+        PostSwCallback(psm->psw, PostSmLoadCallback, psm, MSGID_callback, NULL);
     }
 }
 

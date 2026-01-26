@@ -23,10 +23,10 @@ void CSplotheap::Startup(int cb, int c)
         psplotPrev->psplotNext = psplotCurr;
     }
 
-    psplotCurr->psplotNext = (SPLOT *)nullptr;
+    psplotCurr->psplotNext = NULL;
 
-    m_psplotAlloc = (SPLOT *)nullptr;
-    m_psplotRecyclable = (SPLOT *)nullptr;
+    m_psplotAlloc = NULL;
+    m_psplotRecyclable = NULL;
 }
 #endif // SKIP_ASM
 
@@ -51,7 +51,7 @@ void *CSplotheap::PvAllocUnsafe()
         return PvFromPsplot(psplot);
     }
 
-    return nullptr;
+    return NULL;
 }
 
 void *CSplotheap::PvAllocClear()

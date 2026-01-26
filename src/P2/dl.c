@@ -9,14 +9,14 @@ void InitDl(DL *pdl, int ibDle)
 
 void ClearDl(DL *pdl)
 {
-    pdl->tail = nullptr;
-    pdl->head = nullptr;
+    pdl->tail = NULL;
+    pdl->head = NULL;
 }
 
 void ClearDle(DLE *pdle)
 {
-    pdle->prev = nullptr;
-    pdle->next = nullptr;
+    pdle->prev = NULL;
+    pdle->next = NULL;
 }
 
 DLE *PdleFromDlEntry(DL *pdl, void *pv)
@@ -133,8 +133,8 @@ void RemoveDlEntry(DL *pdl, void *pv)
     }
 
     // Clear links
-    pentry->next = nullptr;
-    pentry->prev = nullptr;
+    pentry->next = NULL;
+    pentry->prev = NULL;
 }
 
 bool FFindDlEntry(DL *pdl, void *pv)

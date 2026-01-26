@@ -22,20 +22,20 @@ void SetXfmParent(XFM *pxfm, ALO *paloParent)
 
 void ApplyXfmProxy(XFM *pxfm, PROXY *pproxyApply)
 {
-    ConvertAloPos(pproxyApply, (ALO *)nullptr, &pxfm->posLocal, &pxfm->posLocal);
-    ConvertAloMat(pproxyApply, (ALO *)nullptr, &pxfm->matLocal, &pxfm->matLocal);
+    ConvertAloPos(pproxyApply, NULL, &pxfm->posLocal, &pxfm->posLocal);
+    ConvertAloMat(pproxyApply, NULL, &pxfm->matLocal, &pxfm->matLocal);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/xform", ConvertXfmLocalToWorld__FP3XFMP6VECTORT1);
 
 void GetXfmPos(XFM *pxfm, VECTOR *ppos)
 {
-    ConvertAloPos(pxfm->paloParent, (ALO *)nullptr, &pxfm->posLocal, ppos);
+    ConvertAloPos(pxfm->paloParent, NULL, &pxfm->posLocal, ppos);
 }
 
 void GetXfmMat(XFM *pxfm, MATRIX3 *pmat)
 {
-    ConvertAloMat(pxfm->paloParent, (ALO *)nullptr, &pxfm->matLocal, pmat);
+    ConvertAloMat(pxfm->paloParent, NULL, &pxfm->matLocal, pmat);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/xform", PwarpFromOid__F3OIDT0);
@@ -114,7 +114,7 @@ void EnableCamera(CAMERA *pcamera)
     if (STRUCT_OFFSET(pcamera, 0x310, int) == 0) // pcamera->fSetCplcy
     {
         // g_pcm->cpaseg
-        SetCmPolicy(g_pcm, CPP_Animated, &STRUCT_OFFSET(g_pcm, 0x510, CPLCY), (SO *)nullptr, pcamera);
+        SetCmPolicy(g_pcm, CPP_Animated, &STRUCT_OFFSET(g_pcm, 0x510, CPLCY), NULL, pcamera);
         STRUCT_OFFSET(pcamera, 0x310, int) = 1; // pcamera->fSetCplcy
     }
 }
@@ -124,7 +124,7 @@ void DisableCamera(CAMERA *pcamera)
     if (STRUCT_OFFSET(pcamera, 0x310, int) != 0) // pcamera->fSetCplcy
     {
         // g_pcm->cpaseg
-        RevokeCmPolicy(g_pcm, 0x0b, CPP_Animated, &STRUCT_OFFSET(g_pcm, 0x510, CPLCY), (SO *)nullptr, pcamera);
+        RevokeCmPolicy(g_pcm, 0x0b, CPP_Animated, &STRUCT_OFFSET(g_pcm, 0x510, CPLCY), NULL, pcamera);
         STRUCT_OFFSET(pcamera, 0x310, int) = 0; // pcamera->fSetCplcy
     }
 }

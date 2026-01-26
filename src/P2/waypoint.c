@@ -69,7 +69,7 @@ void EnsureWpsgCallback(WPSG *pwpsg)
     if (!pwpsg->fCallback)
     {
         pwpsg->fCallback = 1;
-        PostSwCallback(g_psw, UpdateWpsgCallback, pwpsg, MSGID_Nil, nullptr);
+        PostSwCallback(g_psw, UpdateWpsgCallback, pwpsg, MSGID_Nil, NULL);
     }
 }
 

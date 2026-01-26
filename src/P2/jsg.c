@@ -57,7 +57,7 @@ void ApplyJsg(JSG *pjsg, JT *pjt)
     pjsg->pjt = pjt;
     pjsg->ijsgeCur = -1;
 
-    HandleLoSpliceEvent(pjsg, 0x17, 0, (void **)nullptr);
+    HandleLoSpliceEvent(pjsg, 0x17, 0, NULL);
 
     if (pjsg->unk3)
     {
@@ -71,8 +71,8 @@ void RetractJsg(JSG *pjsg)
     if (!pjsg->pjt)
         return;
 
-    SetJsgTn(pjsg, (TN *)nullptr);
-    SetJsgFocus(pjsg, (LO *)nullptr);
+    SetJsgTn(pjsg, NULL);
+    SetJsgFocus(pjsg, NULL);
 
     if (pjsg->pasegaCur)
     {
@@ -82,12 +82,12 @@ void RetractJsg(JSG *pjsg)
 
     SetClockRate(1.0f);
     pjsg->ijsgeCur = pjsg->cjsge;
-    pjsg->ploContext = (LO *)nullptr;
-    pjsg->pjsgeJoy = (JSGE *)nullptr;
-    STRUCT_OFFSET(pjsg->pjt, 0x2740, JSG *) = (JSG *)nullptr; // pjsg->pjt->pjsgCur
-    pjsg->pjt = (JT *)nullptr;
+    pjsg->ploContext = NULL;
+    pjsg->pjsgeJoy = NULL;
+    STRUCT_OFFSET(pjsg->pjt, 0x2740, JSG *) = NULL; // pjsg->pjt->pjsgCur
+    pjsg->pjt = NULL;
 
-    HandleLoSpliceEvent(pjsg, 0x19, 0, 0);
+    HandleLoSpliceEvent(pjsg, 0x19, 0, NULL);
 
     if (pjsg->unk3)
     {

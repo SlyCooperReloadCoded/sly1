@@ -102,7 +102,7 @@ extern "C" char *strchr(char *pchz, int ch)
         }
         pchz++;
     }
-    return (char *)nullptr;
+    return NULL;
 }
 
 JUNK_NOP();
