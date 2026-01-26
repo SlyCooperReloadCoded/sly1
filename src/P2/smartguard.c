@@ -6,9 +6,14 @@ INCLUDE_ASM("asm/nonmatchings/P2/smartguard", InitSmartguard__FP10SMARTGUARD);
 
 INCLUDE_ASM("asm/nonmatchings/P2/smartguard", PostSmartguardLoadFlashlight__FP10SMARTGUARD);
 
-INCLUDE_ASM("asm/nonmatchings/P2/smartguard", UseSmartguardFlashlightTarget__FP10SMARTGUARD3SGS3OID);
+void UseSmartguardFlashlightTarget(SMARTGUARD *psmartguard, SGS sgs, OID oidTarget)
+{
+    FValidSgs(sgs);
+    SGFT *mpsgssgft = &STRUCT_OFFSET(psmartguard, 0xc38, SGFT); // psmartguard->mpsgssgft[sgs]
+    mpsgssgft[sgs].oidTarget = oidTarget;
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/smartguard", FUN_001B7100);
+INCLUDE_ASM("asm/nonmatchings/P2/smartguard", FUN_001B7100__FP10SMARTGUARDi);
 
 INCLUDE_ASM("asm/nonmatchings/P2/smartguard", PostSmartguardLoad__FP10SMARTGUARD);
 

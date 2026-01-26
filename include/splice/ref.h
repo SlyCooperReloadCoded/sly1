@@ -76,6 +76,9 @@ union TAG
 class CRef
 {
 public:
+    TAGK m_tagk;
+    TAG m_tag;
+
     CRef();
     CRef(const CRef &ref);
     ~CRef();
@@ -101,10 +104,6 @@ public:
     void SetMethod(CMethod *pmethod);
     int RefCoerceS32() const;
     float RefCoerceF32() const;
-
-private:
-    TAGK m_tagk;
-    TAG m_tag;
 };
 
 #endif // SPLICE_REF_H

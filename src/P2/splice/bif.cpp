@@ -10,65 +10,180 @@ INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpMult__FiP4CRefP6CFrame);
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpDiv__FiP4CRefP6CFrame);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpPrint__FiP4CRefP6CFrame);
+CRef RefOpPrint(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetTag(TAGK_Void);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpPrintFrame__FiP4CRefP6CFrame);
+CRef RefOpPrintFrame(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetTag(TAGK_Void);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpPrintSidebag__FiP4CRefP6CFrame);
+CRef RefOpPrintSidebag(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetTag(TAGK_Void);
+    return CRef(cref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIntEqual__FiP4CRefP6CFrame);
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefCmp__FP4CRef4CMPK);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpL__FiP4CRefP6CFrame);
+CRef RefOpL(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefCmp(aref, CMPK_L);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpLE__FiP4CRefP6CFrame);
+CRef RefOpLE(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefCmp(aref, CMPK_LE);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpG__FiP4CRefP6CFrame);
+CRef RefOpG(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefCmp(aref, CMPK_G);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpGE__FiP4CRefP6CFrame);
+CRef RefOpGE(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefCmp(aref, CMPK_GE);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpEqv__FiP4CRefP6CFrame);
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefEqualHelper__FP4CRefT0);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpEqual__FiP4CRefP6CFrame);
+CRef RefOpEqual(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefEqualHelper(&aref[0], &aref[1]);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsBoolean__FiP4CRefP6CFrame);
+CRef RefOpIsBoolean(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Bool);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsNum__FiP4CRefP6CFrame);
+CRef RefOpIsNum(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_S32 || aref->m_tagk == TAGK_F32);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsFloat__FiP4CRefP6CFrame);
+CRef RefOpIsFloat(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_F32);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsInteger__FiP4CRefP6CFrame);
+CRef RefOpIsInteger(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_S32);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsSymbol__FiP4CRefP6CFrame);
+CRef RefOpIsSymbol(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Symid);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsVector__FiP4CRefP6CFrame);
+CRef RefOpIsVector(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Vector);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsMatrix__FiP4CRefP6CFrame);
+CRef RefOpIsMatrix(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Matrix);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsClq__FiP4CRefP6CFrame);
+CRef RefOpIsClq(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Clq);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsLm__FiP4CRefP6CFrame);
+CRef RefOpIsLm(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Lm);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsSmp__FiP4CRefP6CFrame);
+CRef RefOpIsSmp(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Smp);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsList__FiP4CRefP6CFrame);
+CRef RefOpIsList(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Pair || aref->m_tagk == TAGK_None);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsNull__FiP4CRefP6CFrame);
+CRef RefOpIsNull(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_None);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsObject__FiP4CRefP6CFrame);
+CRef RefOpIsObject(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Basic);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsNullObj__FiP4CRefP6CFrame);
+CRef RefOpIsNullObj(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Basic && !aref->m_tag.m_pbasic);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsMethod__FiP4CRefP6CFrame);
+CRef RefOpIsMethod(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Method);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsProcedure__FiP4CRefP6CFrame);
+CRef RefOpIsProcedure(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Proc || aref->m_tagk == TAGK_Bifk);
+    return CRef(cref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAreNear__FiP4CRefP6CFrame);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpNot__FiP4CRefP6CFrame);
+CRef RefOpNot(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref->m_tagk == TAGK_Bool && !aref->m_tag.m_bool);
+    return CRef(cref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpCons__FiP4CRefP6CFrame);
 
@@ -88,7 +203,10 @@ INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpNth__FiP4CRefP6CFrame);
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIsMember__FiP4CRefP6CFrame);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpList__FiP4CRefP6CFrame);
+CRef RefOpList(int carg, CRef *aref, CFrame *pframe)
+{
+    return CRef(*aref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAppend__FiP4CRefP6CFrame);
 
@@ -120,21 +238,45 @@ INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpRandom__FiP4CRefP6CFrame);
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefUfo__FP4CRef4UFOK);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpSqrt__FiP4CRefP6CFrame);
+CRef RefOpSqrt(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Sqrt);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpSin__FiP4CRefP6CFrame);
+CRef RefOpSin(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Sin);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpCos__FiP4CRefP6CFrame);
+CRef RefOpCos(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Cos);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpTan__FiP4CRefP6CFrame);
+CRef RefOpTan(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Tan);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAsin__FiP4CRefP6CFrame);
+CRef RefOpAsin(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Asin);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAcos__FiP4CRefP6CFrame);
+CRef RefOpAcos(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Acos);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAtan__FiP4CRefP6CFrame);
+CRef RefOpAtan(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_Atan);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpRadNormalize__FiP4CRefP6CFrame);
+CRef RefOpRadNormalize(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefUfo(aref, UFOK_RadNormalize);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAtan2__FiP4CRefP6CFrame);
 

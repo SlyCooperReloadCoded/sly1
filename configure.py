@@ -375,6 +375,7 @@ OPCODE_PATTERN = re.compile(f"{COMMENT_PART}  {INSTRUCTION_PART}")
 
 PROBLEMATIC_FUNCS = set(
     [
+        "RefOpForEach__FiP4CRefP6CFrame",             # P2/splice/bif
         "PredictAsegEffect__FP4ASEGffP3ALOT3iP6VECTORP7MATRIX3T6T6", # P2/aseg
         "ProjectBlipgTransform__FP5BLIPGfi",          # P2/blip
         "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",       # P2/emitter
