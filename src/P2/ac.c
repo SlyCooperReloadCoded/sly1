@@ -12,7 +12,7 @@ void GetAcpTimes(ACP *pacp, int *pct, float **pat)
     *pct = 0;
     if (pat)
     {
-        *pat = (float *)nullptr;
+        *pat = NULL;
     }
 }
 
@@ -31,7 +31,7 @@ void GetAcrTimes(ACR *pacr, int *pct, float **pat)
     *pct = 0;
     if (pat)
     {
-        *pat = (float *)nullptr;
+        *pat = NULL;
     }
 }
 
@@ -45,7 +45,7 @@ void GetAcsTimes(ACS *pacs, int *pct, float **pat)
     *pct = 0;
     if (pat)
     {
-        *pat = (float *)nullptr;
+        *pat = NULL;
     }
 }
 
@@ -59,7 +59,7 @@ void GetAcgTimes(ACG *pacg, int *pct, float **pat)
     *pct = 0;
     if (pat)
     {
-        *pat = (float *)nullptr;
+        *pat = NULL;
     }
 }
 

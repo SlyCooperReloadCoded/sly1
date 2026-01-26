@@ -3,13 +3,13 @@
 void InitGeom(GEOM *pgeom)
 {
     pgeom->cpos = 0;
-    pgeom->apos = (VECTOR *)nullptr;
+    pgeom->apos = NULL;
 
     pgeom->csurf = 0;
-    pgeom->asurf = (SURF *)nullptr;
+    pgeom->asurf = NULL;
 
     pgeom->cedge = 0;
-    pgeom->aedge = (EDGE *)nullptr;
+    pgeom->aedge = NULL;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/geom", CloneGeom__FP4GEOMP7MATRIX4T0);

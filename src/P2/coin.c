@@ -152,9 +152,9 @@ void SetCharmDprizes(CHARM *pcharm, DPRIZES dprizes)
     if (dprizes == DPRIZES_Collect)
     {
         dprizes = DPRIZES_Swirl;
-        StartSound(SFXID_Collect_Charm, (AMB **)0x0, pcharm, (VECTOR *) 0x0,
-                   1500.0f, 0.0f,1, 0.0f, 0.0f, (LM *)0x0, (LM *)0x0);
-        HandleLoSpliceEvent(pcharm, 2, 0, 0);
+        StartSound(SFXID_Collect_Charm, NULL, pcharm, NULL, 1500.0f, 0.0f, 1, 0.0f, 0.0f, NULL,
+                   NULL);
+        HandleLoSpliceEvent(pcharm, 2, 0, NULL);
     }
 
     SetDprizeDprizes(pcharm, dprizes);

@@ -8,7 +8,7 @@ void RetractActseg(ACTSEG *pactseg, GRFRA grfra)
 
     if (pasega->pactsegError == pactseg)
     {
-        pasega->pactsegError = (ACTSEG *)nullptr;
+        pasega->pactsegError = NULL;
     }
 
     RetractAct(pactseg, grfra);

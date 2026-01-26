@@ -53,7 +53,7 @@ void InitVolzp(VOLZP *pvolzp)
 {
     InitTzp(pvolzp);
     STRUCT_OFFSET(pvolzp, 0x538, ulong) |= 0x80000000000; // ptzp->bspcCamera.absp
-    SetSoConstraints(pvolzp, CT_Locked, (VECTOR *)nullptr, CT_Locked, (VECTOR *)nullptr);
+    SetSoConstraints(pvolzp, CT_Locked, NULL, CT_Locked, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/zap", UpdateVolzp__FP5VOLZPf);
@@ -75,7 +75,7 @@ void InflictZpdZap(ZPD *pzpd, XP *pxp, ZPR *pzpr)
     pzpr->zpk = pzpd->zpk;
     pzpr->pv = pzpd;
     pzpr->pfnzap = ApplyZpdThrow;
-    HandleLoSpliceEvent(pzpd->pso, 2, 0, (void **)nullptr);
+    HandleLoSpliceEvent(pzpd->pso, 2, 0, NULL);
 }
 
 void AddZpdZapObject(ZPD *pzpd, OID oid)

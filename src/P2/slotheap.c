@@ -15,7 +15,7 @@ void _InitSlotheap(SLOTHEAP *pslotheap, int cb, int c)
         pslotPrev->pslotNext = (SLOT *)pbBase;
     }
 
-    ((SLOT *)pbBase)->pslotNext = (SLOT *)nullptr;
+    ((SLOT *)pbBase)->pslotNext = NULL;
 }
 
 void CreateSlotheapSw(SLOTHEAP *pslotheap, int cb, int c)

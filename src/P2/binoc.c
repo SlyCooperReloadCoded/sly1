@@ -17,7 +17,7 @@ void InitBinoc(BINOC *binoc, BLOTK blotk)
 void ResetBinoc(BINOC *binoc)
 {
     binoc->pvtbinoc->pfnSetBinocAchzDraw(binoc, 0);
-    SetBinocLookat(binoc, (ALO *)0);
+    SetBinocLookat(binoc, NULL);
     binoc->dxReticle = 0.0f;
     binoc->dyReticle = 0.0f;
     binoc->uCompassBarOffset = 0.4f;

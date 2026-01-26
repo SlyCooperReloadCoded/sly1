@@ -56,7 +56,7 @@ void HandleDialogMessage(DIALOG *pdialog, MSGID msgid, void *pv)
     // pdialog->dp
     if (msgid == MSGID_asega_retracted && (ASEGA *)pv == STRUCT_OFFSET(pdialog, 0x2e8, DP).pasegaLipsync)
     {
-        STRUCT_OFFSET(pdialog, 0x2e8, DP).pasegaLipsync = (ASEGA *)nullptr;
+        STRUCT_OFFSET(pdialog, 0x2e8, DP).pasegaLipsync = NULL;
     }
 }
 

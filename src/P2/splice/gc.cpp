@@ -48,7 +48,7 @@ CFrame *CGc::PframePop()
     {
         return m_apframeStack[--m_cpframeStack];
     }
-    return (CFrame *)nullptr;
+    return NULL;
 }
 
 void CGc::PushPair(CPair *ppair)
@@ -62,7 +62,7 @@ CPair *CGc::PpairPop()
     {
         return m_appairStack[--m_cppairStack];
     }
-    return (CPair *)nullptr;
+    return NULL;
 }
 
 void CGc::PushProc(CProc *pproc)
@@ -76,7 +76,7 @@ CProc *CGc::PprocPop()
     {
         return m_approcStack[--m_cpprocStack];
     }
-    return (CProc *)nullptr;
+    return NULL;
 }
 
 void CGc::UpdateRecyclable()

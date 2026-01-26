@@ -108,10 +108,10 @@ INCLUDE_ASM("asm/nonmatchings/P2/screen", DrawTimer__FP5TIMER);
 void SetTimer(TIMER *ptimer, float dt)
 {
     float threshold = D_0024CD4C;
-    ptimer->pfntnThreshold = (undefined1 *)0;
+    ptimer->pfntnThreshold = NULL;
     ptimer->fThreshold = 0;
     ptimer->dtExpire = 0.0;
-    ptimer->pfntnExpire = (undefined1 *)0;
+    ptimer->pfntnExpire = NULL;
     ptimer->fStopped = 0;
     *(int*)&ptimer->rgba = 0xff808080; // Union?
     ptimer->svt = -1.0;
