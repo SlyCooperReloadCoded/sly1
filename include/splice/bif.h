@@ -18,6 +18,11 @@ class CFrame;
 enum BIFK
 {
     // ...
+    BIFK_AddO = 99,
+    BIFK_EnsureO = 100,
+    BIFK_SetO = 101,
+    BIFK_GetO = 102,
+    // ...
 };
 
 /**

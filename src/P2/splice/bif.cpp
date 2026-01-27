@@ -1,6 +1,7 @@
 #include <splice/bif.h>
 #include <splice/ref.h>
 #include <splice/frame.h>
+#include <po.h>
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAdd__FiP4CRefP6CFrame);
 
@@ -31,7 +32,12 @@ CRef RefOpPrintSidebag(int carg, CRef *aref, CFrame *pframe)
     return CRef(cref);
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpIntEqual__FiP4CRefP6CFrame);
+CRef RefOpIntEqual(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBool(aref[0].m_tag.m_n == aref[1].m_tag.m_n);
+    return CRef(cref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefCmp__FP4CRef4CMPK);
 
@@ -354,13 +360,25 @@ INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpDeferObjectUpdate__FiP4CRefP6
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpObjectOption__FiP4CRefP6CFrame4BIFK);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpAddO__FiP4CRefP6CFrame);
+CRef RefOpAddO(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefOpObjectOption(carg, aref, pframe, BIFK_AddO);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpEnsureO__FiP4CRefP6CFrame);
+CRef RefOpEnsureO(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefOpObjectOption(carg, aref, pframe, BIFK_EnsureO);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpSetO__FiP4CRefP6CFrame);
+CRef RefOpSetO(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefOpObjectOption(carg, aref, pframe, BIFK_SetO);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpGetO__FiP4CRefP6CFrame);
+CRef RefOpGetO(int carg, CRef *aref, CFrame *pframe)
+{
+    return RefOpObjectOption(carg, aref, pframe, BIFK_GetO);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefPairFromAplo__FiPP2LO);
 
@@ -372,11 +390,26 @@ INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindNearestObject__FiP4CRefP6
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindNearestObjects__FiP4CRefP6CFrame);
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindPlayerObject__FiP4CRefP6CFrame);
+CRef RefOpFindPlayerObject(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBasic(PpoCur());
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindWorldObject__FiP4CRefP6CFrame);
+CRef RefOpFindWorldObject(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBasic(g_psw);
+    return CRef(cref);
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindCameraObject__FiP4CRefP6CFrame);
+CRef RefOpFindCameraObject(int carg, CRef *aref, CFrame *pframe)
+{
+    CRef cref = CRef();
+    cref.SetBasic(g_pcm);
+    return CRef(cref);
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/splice/bif", RefOpFindClassObjects__FiP4CRefP6CFrame);
 
