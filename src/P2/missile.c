@@ -1,10 +1,23 @@
 #include <missile.h>
+#include <asega.h>
 
-INCLUDE_ASM("asm/nonmatchings/P2/missile", InitMissile__FP7MISSILE);
+void InitMissile(MISSILE *pmissile)
+{
+    InitBomb(pmissile);
+    STRUCT_OFFSET(pmissile, 0x6b8, int) = 1; // pmissile->fFollowTrajectory
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/missile", LoadMissileFromBrx__FP7MISSILEP18CBinaryInputStream);
 
-INCLUDE_ASM("asm/nonmatchings/P2/missile", OnMissileRemove__FP7MISSILE);
+void OnMissileRemove(MISSILE *pmissile)
+{
+    OnSoRemove(pmissile);
+    if (STRUCT_OFFSET(pmissile, 0x6b4, ASEGA *)) // pmissile->pasegaCur
+    {
+        RetractAsega(STRUCT_OFFSET(pmissile, 0x6b4, ASEGA *));
+        STRUCT_OFFSET(pmissile, 0x6b4, ASEGA *) = NULL; // pmissile->pasegaCur
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/missile", ProjectMissileTransform__FP7MISSILEfi);
 

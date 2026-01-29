@@ -22,6 +22,9 @@ struct RO;
 struct MISSILE : public BOMB
 {
     // ...
+    /* 0x6b4 */ ASEGA *pasegaCur;
+    /* 0x6b8 */ int fFollowTrajectory;
+    // ...
 };
 
 /**

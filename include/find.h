@@ -24,9 +24,9 @@ DL *PdlFromSwOid(SW *psw, OID oid);
 
 void MatchSwObject(LO *ploMatch, int grffsoMask, int fIncludeRemoved, int fProxyMatch, LO *ploContext, int cploMax, int *pcploMatch, LO **aplo, int *pcpaloBest);
 
-int CploFindSwObjects(SW *psw, int grffso, OID oid, LO *ploContext, int cploMax, LO **aplo);
+int CploFindSwObjects(SW *psw, GRFFSO grffso, OID oid, LO *ploContext, int cploMax, LO **aplo);
 
-LO *PloFindSwObject(SW *psw, int grffso, OID oid, LO *ploContext);
+LO *PloFindSwObject(SW *psw, GRFFSO grffso, OID oid, LO *ploContext);
 
 /**
  * @brief Finds the nearest SW object with the given OID from the context LO.
@@ -61,9 +61,9 @@ LO *PloFindSwChild(SW *psw, OID oid, ALO *paloAncestor);
  */
 int FIsCidDerivedFrom(int cid, int cidAncestor);
 
-int CploFindSwObjectsByClass(SW *psw, int grffso, CID cid, LO *ploContext, int cploMax, LO **aplo);
+int CploFindSwObjectsByClass(SW *psw, GRFFSO grffso, CID cid, LO *ploContext, int cploMax, LO **aplo);
 
-LO *PloFindSwObjectByClass(SW *psw, int grffso, CID cid, LO *ploContext);
+LO *PloFindSwObjectByClass(SW *psw, GRFFSO grffso, CID cid, LO *ploContext);
 
 /**
  * @brief Finds the common parent of two LOs.
