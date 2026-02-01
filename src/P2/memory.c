@@ -2,8 +2,6 @@
 #include <thread.h>
 #include <sce/memset.h>
 
-typedef unsigned long long u128 __attribute((mode(TI)));
-
 /**
  * @todo Change these to static when possible.
  */
@@ -166,13 +164,10 @@ void __builtin_delete()
     return;
 }
 
-/**
- * @todo Change u128 to qw and delete u128 typedef
- */
 void CopyAqw(void *pvDst, void *pvSrc, int cqw)
 {
-    u128 *dst = (u128 *)pvDst;
-    u128 *src = (u128 *)pvSrc;
+    qword *dst = (qword *)pvDst;
+    qword *src = (qword *)pvSrc;
 
     int remainder = cqw & 0x03;
     int nQWords = cqw - remainder;
@@ -187,10 +182,10 @@ void CopyAqw(void *pvDst, void *pvSrc, int cqw)
     processed = 0;
     while (processed < nQWords)
     {
-        u128 qw0 = src[0];
-        u128 qw1 = src[1];
-        u128 qw2 = src[2];
-        u128 qw3 = src[3];
+        qword qw0 = src[0];
+        qword qw1 = src[1];
+        qword qw2 = src[2];
+        qword qw3 = src[3];
         src += 4;
 
         dst[0] = qw0;
