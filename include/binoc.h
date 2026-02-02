@@ -59,6 +59,20 @@ struct BINOC : public BLOT
  */
 void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg);
 
+/**
+ * @brief Evaluates the binocular edge curve at a given segment.
+ *
+ * @details Returns the Y-coordinate for the outline at segment index iseg. For segments
+ *          outside the notch region, evaluates the quadratic curve directly. Within the
+ *          notch, performs linear interpolation between edge and center values to create
+ *          a V shaped cutout.
+ *
+ * @param pbei Pointer to the BEI struct containing curve and notch parameters.
+ * @param iseg Segment index along the outline.
+ * @return Y-coordinate value for the outline at this segment.
+ */
+float GEvaluateBei(BEI *pbei, int iseg);
+
 void SetBinocLookat(BINOC *binoc, ALO *paloLookat);
 
 /**

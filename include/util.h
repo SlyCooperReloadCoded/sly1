@@ -45,6 +45,21 @@ static inline float GEvaluateClq(CLQ *pclq, float x)
 }
 
 /**
+ * @brief Linear interpolation between two values.
+ *
+ * @details Returns (1-t)*a + t*b, smoothly blending from a (at t=0) to b (at t=1).
+ *
+ * @param a Starting value
+ * @param b Ending value
+ * @param t Interpolation parameter (typically 0.0-1.0)
+ * @return Interpolated value between a and b
+ */
+static inline float GLerp(float a, float b, float t)
+{
+    return (1.0f - t) * a + t * b;
+}
+
+/**
  * @brief Limits for a float.
  */
 struct LM

@@ -25,7 +25,44 @@ void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg)
     pbei->gNotchCenter = GEvaluateClq(pclq, 0.5f) + dgHeight;
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", GEvaluateBei);
+float GEvaluateBei(BEI *pbei, int iseg)
+{
+    // A more idiomatic structure would check if inside the notch first
+    // and use the CLQ evaluation as the default return value.
+
+    // Outside notch region
+    if (iseg < pbei->isegNotchFirst || iseg > pbei->isegNotchLast)
+    {
+        // Evaluate quadratic curve
+        float t = iseg / pbei->cseg;
+        return GEvaluateClq(&pbei->clq, t);
+    }
+
+    // Notch edges
+    if (iseg == pbei->isegNotchFirst || iseg == pbei->isegNotchLast)
+    {
+        // Return edge height
+        return pbei->gNotchEdge;
+    }
+
+    // Left side of notch
+    if (iseg < pbei->isegNotchMid)
+    {
+        // Interpolate between edge and center
+        float t = (iseg - pbei->isegNotchFirst) / pbei->csegNotchHalf;
+        return GLerp(pbei->gNotchEdge, pbei->gNotchCenter, t);
+    }
+
+    // Right side of notch
+    if (iseg > pbei->isegNotchMid)
+    {
+        // Interpolate between center and edge
+        float t = (iseg - pbei->isegNotchMid) / pbei->csegNotchHalf;
+        return GLerp(pbei->gNotchCenter, pbei->gNotchEdge, t);
+    }
+
+    return pbei->gNotchCenter;
+}
 
 void InitBinoc(BINOC *binoc, BLOTK blotk)
 {
