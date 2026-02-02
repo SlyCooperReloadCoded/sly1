@@ -64,9 +64,9 @@ bool CRef::operator==(const CRef& ref)
                (m_tag.m_pvector->y == ref.m_tag.m_pvector->y) &&
                (m_tag.m_pvector->z == ref.m_tag.m_pvector->z);
     case TAGK_Clq:
-        return (m_tag.m_pclq->u == ref.m_tag.m_pclq->u) &&
-               (m_tag.m_pclq->v == ref.m_tag.m_pclq->v) &&
-               (m_tag.m_pclq->w == ref.m_tag.m_pclq->w);
+        return (m_tag.m_pclq->g0 == ref.m_tag.m_pclq->g0) &&
+               (m_tag.m_pclq->g1 == ref.m_tag.m_pclq->g1) &&
+               (m_tag.m_pclq->g2 == ref.m_tag.m_pclq->g2);
     case TAGK_Smp:
         return (m_tag.m_psmp->svFast == ref.m_tag.m_psmp->svFast) &&
                (m_tag.m_psmp->svSlow == ref.m_tag.m_psmp->svSlow) &&

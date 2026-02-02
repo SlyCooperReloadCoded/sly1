@@ -12,13 +12,20 @@
 #include <sm.h>
 
 /**
- * @brief Unknown.
+ * @brief Constant Linear Quadratic.
  *
- * @todo Figure out what this is.
+ * @note Quadratic curve representation
  */
 struct CLQ
 {
-	float u, v, w, x;
+    union
+    {
+        struct
+        {
+            float g0, g1, g2, gUnused;
+        };
+        float ag[4];
+    };
 };
 
 /**

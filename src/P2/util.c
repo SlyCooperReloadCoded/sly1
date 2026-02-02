@@ -177,9 +177,9 @@ int CSolveQuadratic(float a, float b, float c, float *ax)
 
 void PrescaleClq(CLQ *pclqSrc, float ru, float du, CLQ *pclqDst)
 {
-    pclqDst->w = pclqSrc->w * ru * ru;
-    pclqDst->v = (pclqSrc->w + pclqSrc->w) * ru * du + pclqSrc->v * ru;
-    pclqDst->u = pclqSrc->w * du * du + pclqSrc->v * du + pclqSrc->u;
+    pclqDst->g2 = pclqSrc->g2 * ru * ru;
+    pclqDst->g1 = (pclqSrc->g2 + pclqSrc->g2) * ru * du + pclqSrc->g1 * ru;
+    pclqDst->g0 = pclqSrc->g2 * du * du + pclqSrc->g1 * du + pclqSrc->g0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/P2/util", CalculateSinCos__FfPfT1);
@@ -314,9 +314,9 @@ float GModPositive(float gDividend, float gDivisor)
 
 void FitClq(float g0, float g1, float u, float gU, CLQ *pclq)
 {
-    pclq->u = g0;
-    pclq->w = ((gU - g0) / u - (g1 - g0)) / (u - 1.0f);
-    pclq->v = (g1 - g0) - pclq->w;
+    pclq->g0 = g0;
+    pclq->g2 = ((gU - g0) / u - (g1 - g0)) / (u - 1.0f);
+    pclq->g1 = (g1 - g0) - pclq->g2;
 }
 
 int FCheckLm(LM *plm, float g)
