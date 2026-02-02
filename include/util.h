@@ -29,6 +29,22 @@ struct CLQ
 };
 
 /**
+ * @brief Evaluates a quadratic curve at parameter x.
+ *
+ * @details Computes the quadratic equation: g0 + x*g1 + x²*g2
+ *          Uses Horner's method for efficient evaluation: g0 + x*(g1 + x*g2)
+ *          This reduces multiplications from 3 to 2 compared to the expanded form.
+ *
+ * @param pclq Pointer to the quadratic curve
+ * @param x Parameter value
+ * @return Evaluated curve value at x
+ */
+static inline float GEvaluateClq(CLQ *pclq, float x)
+{
+    return pclq->g0 + x * (pclq->g1 + x * pclq->g2);
+}
+
+/**
  * @brief Limits for a float.
  */
 struct LM

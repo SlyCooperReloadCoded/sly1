@@ -975,7 +975,7 @@ LimitBezierMulti__Fie = 0x130C58; // type:func
 ////////////////////////////////////////////////////////////////
 // P2/binoc.c
 ////////////////////////////////////////////////////////////////
-InitBei = 0x130F48; // type:func
+InitBei__FP3BEIP3CLQffi = 0x130F48; // type:func
 GEvaluateBei = 0x131000; // type:func
 InitBinoc__FP5BINOC5BLOTK = 0x1310F0; // type:func
 ResetBinoc__FP5BINOC = 0x131140; // type:func

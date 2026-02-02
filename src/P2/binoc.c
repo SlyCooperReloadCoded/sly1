@@ -1,7 +1,29 @@
 #include <binoc.h>
 #include <alo.h>
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", InitBei);
+void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg)
+{
+    // Copy CLQ
+    *(qword *)&pbei->clq = *(qword *)pclq;
+
+    pbei->cseg = cseg;
+
+    // Calculate segment count of half the notch
+    float duSegWidth = 1.0f / cseg;
+    float csegNotchWidth = duWidth / duSegWidth;
+    int csegNotchHalf = (int)csegNotchWidth >> 1; // Simplifies to duWidth * cseg / 2
+
+    pbei->csegNotchHalf = csegNotchHalf;
+
+    // Calculate notch segment indices
+    pbei->isegNotchMid = cseg / 2;
+    pbei->isegNotchFirst = pbei->isegNotchMid - csegNotchHalf;
+    pbei->isegNotchLast = pbei->isegNotchMid + csegNotchHalf;
+
+    // Evaluate curve at notch edges and center
+    pbei->gNotchEdge = GEvaluateClq(pclq, pbei->isegNotchFirst / pbei->cseg);
+    pbei->gNotchCenter = GEvaluateClq(pclq, 0.5f) + dgHeight;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/binoc", GEvaluateBei);
 
