@@ -33,6 +33,16 @@ class CFont
 
 extern CFont *g_pfont;
 
+class CRichText
+{
+  public:
+    CRichText(char *achz, CFont *pfont);
+    int Cch();
+
+  private:
+    undefined1 _padding[0xB0];
+};
+
 void StartupFont();
 
 #endif // FONT_H

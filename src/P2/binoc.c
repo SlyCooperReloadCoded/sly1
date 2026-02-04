@@ -1,5 +1,7 @@
 #include <binoc.h>
 #include <alo.h>
+#include <clock.h>
+#include <font.h>
 
 void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg)
 {
@@ -132,7 +134,21 @@ INCLUDE_ASM("asm/nonmatchings/P2/binoc", FUN_001363d0);
 
 INCLUDE_ASM("asm/nonmatchings/P2/binoc", SetBinocAchzDraw);
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", FDoneBinocAchz);
+bool FDoneBinocAchz(BINOC *pbinoc)
+{
+    if (pbinoc->achzDraw[0] == '\0')
+    {
+        return true;
+    }
+
+    CRichText rt(pbinoc->achzDraw, pbinoc->pfont);
+    int cchTotal = rt.Cch();
+
+    float tAchzDraw = g_clock.t - STRUCT_OFFSET(pbinoc, 0x268, float); // pbinoc->tAchzSet
+    int cchDrawn = (int)(tAchzDraw * STRUCT_OFFSET(pbinoc, 0x2F0, float)); // pbinoc->svch
+
+    return cchDrawn >= cchTotal;
+}
 
 void SetBinocLookat(BINOC *binoc, ALO *paloLookat)
 {

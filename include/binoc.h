@@ -73,6 +73,14 @@ void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg);
  */
 float GEvaluateBei(BEI *pbei, int iseg);
 
+/**
+ * @brief Checks if the binocular text reveal animation is complete.
+ *
+ * @param pbinoc Pointer to BINOC instance.
+ * @return true if the text animation is complete, false otherwise.
+ */
+bool FDoneBinocAchz(BINOC *pbinoc);
+
 void SetBinocLookat(BINOC *binoc, ALO *paloLookat);
 
 /**

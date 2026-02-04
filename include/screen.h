@@ -61,7 +61,7 @@ struct BLOT
         VTTOTALS *pvttotals;
     };
     CFont *pfont;
-    undefined1 achzDraw[512];
+    char achzDraw[512];
     RGBA rgba;
     float rFontScale;
     CTextEdge *pte;
