@@ -45,6 +45,7 @@ class CRichText
     CRichText(char *achz, CFont *pfont);
     int Cch();
     void Reset();
+    void SetBaseColor(RGBA *rgba);
 
   private:
     char *m_achz;

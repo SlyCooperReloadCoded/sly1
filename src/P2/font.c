@@ -70,7 +70,11 @@ void CRichText::Reset()
     this->m_unknown = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/P2/font", SetBaseColor__9CRichTextG4RGBA);
+void CRichText::SetBaseColor(RGBA *rgba)
+{
+    this->m_rgbaBase = *rgba;
+    this->m_rgbaCur = this->m_rgbaBase;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", ChNext__9CRichText);
 
