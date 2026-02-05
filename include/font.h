@@ -31,6 +31,12 @@ class CFont
     float m_ryScale;
 };
 
+class CFontBrx : public CFont
+{
+  private:
+    undefined1 m_padding[0x33];
+};
+
 extern CFont *g_pfont;
 
 class CRichText
@@ -38,9 +44,19 @@ class CRichText
   public:
     CRichText(char *achz, CFont *pfont);
     int Cch();
+    void Reset();
 
   private:
-    undefined1 _padding[0xB0];
+    char *m_achz;
+    char *m_pchCur;
+    CFont *m_pfontCur;
+    CFont *m_pfontBase;
+    CFontBrx m_fontOther;
+    undefined4 m_unknown; // todo: figure out what this is
+    RGBA m_rgbaCur;
+    RGBA m_rgbaSet;
+    RGBA m_rgbaBase;
+    RGBA m_rgbaOther;
 };
 
 void StartupFont();

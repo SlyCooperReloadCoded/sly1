@@ -61,7 +61,14 @@ INCLUDE_ASM("asm/nonmatchings/P2/font", PglyffFromCh__8CFontBrxc);
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", __9CRichTextPcP5CFont);
 
-INCLUDE_ASM("asm/nonmatchings/P2/font", Reset__9CRichText);
+void CRichText::Reset()
+{
+    this->m_pchCur = this->m_achz;
+    this->m_pfontCur = this->m_pfontBase;
+    this->m_rgbaSet = this->m_rgbaBase;
+    this->m_rgbaCur = this->m_rgbaSet;
+    this->m_unknown = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", SetBaseColor__9CRichTextG4RGBA);
 
