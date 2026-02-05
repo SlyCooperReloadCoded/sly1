@@ -18,6 +18,10 @@ struct SFR
 
 class CFont
 {
+  public:
+    void CopyTo(CFont *pfontDest);
+
+  protected:
     int m_dxCharUnscaled;
     int m_dxSpaceUnscaled;
     int m_dyUnscaled;
