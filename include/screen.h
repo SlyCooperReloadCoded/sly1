@@ -122,7 +122,7 @@ struct CTR : public BLOT
     int *pnTotal;
     float dgDisplayMax;
     float uRemain;
-    void *pfnsmack; // should be a function pointer
+    void (*pfnsmack)(void *);
     void *pv;
 };
 

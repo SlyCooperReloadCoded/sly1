@@ -170,6 +170,8 @@ void UpdateCoin(COIN *pcoin, float dt);
 
 // ...
 
+void CreateSwCharm(SW *psw);
+
 /**
  * @brief Adds a life.
  *

@@ -89,41 +89,38 @@ void AddLife(void *ptr)
 INCLUDE_ASM("asm/nonmatchings/P2/coin", OnCoinSmack__FP4COIN);
 #ifdef SKIP_ASM
 /**
- * @todo 56.06% matched.
+ * @todo 91.21% matched.
  */
 void OnCoinSmack(COIN *pcoin)
 {
-    const GS *gsCur = g_pgsCur;
-    const int newCoinCount = g_pgsCur->ccoin + 1;
+    g_pgsCur->ccoin++;
 
-    // Increment coin count
-    g_pgsCur->ccoin = newCoinCount;
+    if (g_pgsCur->ccoin < 100)
+        return;
 
-    if (newCoinCount > 99)
-    { // Case: Player has max coins
-        int max_charms = CcharmMost();
-        if (gsCur->ccharm < max_charms)
-        { // Case: Player does not have max charms
-            // Set coins to 0 and give Sly a lucky charm
+    if (g_pgsCur->ccharm < CcharmMost())
+    {
+        // Give the player a charm and reset the coin count
+        g_pgsCur->ccoin = 0;
+        g_coinctr.dgDisplayMax = 250.0f;
+        g_coinctr.pfnsmack = CreateSwCharm;
+        g_coinctr.pv = pcoin->psw;
+    }
+    else
+    {
+        if (g_pgsCur->clife < 99)
+        {
+            // Give the player a life and reset the coin count
             g_pgsCur->ccoin = 0;
-            // todo: gui stuff including the callback that actually gives the lucky charm
-            g_pgsCur->ccharm += 1; // temp
+            g_coinctr.dgDisplayMax = 250.0f;
+            g_coinctr.pv = NULL;
+            g_coinctr.pfnsmack = AddLife;
+            g_lifectr.pvtblot->pfnShowBlot(&g_lifectr);
         }
         else
-        { // Case: Player has max charms
-            if (gsCur->clife < 99)
-            { // Case: Player does not have max lives
-                // Set coins to 0 and give Sly an extra life
-
-                g_pgsCur->ccoin = 0;
-                // todo: gui stuff including the callback that actually gives the extra life
-                g_pgsCur->clife += 1; // temp
-            }
-            else
-            { // Case: Player has max lives
-                // Make sure coins is capped at the max value and do nothing
-                g_pgsCur->ccoin = 99;
-            }
+        {
+            // Clamp coin count to 99
+            g_pgsCur->ccoin = 99;
         }
     }
 }
