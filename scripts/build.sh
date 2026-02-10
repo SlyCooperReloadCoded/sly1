@@ -12,6 +12,8 @@ fi
 pushd $PROJECT_DIR > /dev/null
 trap "popd > /dev/null" EXIT
 
-source "env/bin/activate"
+if [ -z "$VIRTUAL_ENV" ]; then
+    source "env/bin/activate"
+fi
 python3 "configure.py" --clean
 ninja

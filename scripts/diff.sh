@@ -7,7 +7,9 @@ if [ -z "$1" ]; then
 fi
 
 cd "$(dirname "$0")/.."
-source env/bin/activate
+if [ -z "$VIRTUAL_ENV" ]; then
+	source "env/bin/activate"
+fi
 python3 configure.py --objects
 ninja
 
