@@ -205,6 +205,11 @@ extern IEXC g_iexcHyst;
 int FVagPlaying();
 
 /**
+ * @brief Set VAG unpaused state.
+ */
+int SetVagUnpaused();
+
+/**
  * @brief Unknown.
  */
 void UnsetExcitement(EXC *pexc);

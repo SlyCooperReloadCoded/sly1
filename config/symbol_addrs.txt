@@ -3978,7 +3978,7 @@ SbpEnsureBank__F5SFXID = 0x1BE4A8; // type:func
 NewSfx__FPP3SFX = 0x1BE4D8; // type:func
 FContinuousSound__F5SFXID = 0x1BE568; // type:func
 FUN_001BE5D8 = 0x1BE5D8; // type:func
-SetVagUnpaused__FUiUl = 0x1BE5E8; // type:func
+SetVagUnpaused__Fv = 0x1BE5E8; // type:func
 PreloadVag__FPc2FK = 0x1BE5F8; // type:func
 
 FUN_001be708 = 0x1BE708; // type:func

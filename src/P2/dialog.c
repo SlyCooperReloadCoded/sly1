@@ -1,5 +1,8 @@
 #include <dialog.h>
 #include <asega.h>
+#include <screen.h>
+#include <wipe.h>
+#include <sound.h>
 
 void InitDialog(DIALOG *pdialog)
 {
@@ -68,7 +71,58 @@ INCLUDE_ASM("asm/nonmatchings/P2/dialog", HandleDialogEvents__FP6DIALOG);
 
 INCLUDE_ASM("asm/nonmatchings/P2/dialog", FUN_00151860);
 
-INCLUDE_ASM("asm/nonmatchings/P2/dialog", TriggerDialog__FP6DIALOG);
+void TriggerDialog(DIALOG *pdialog)
+{
+    NOTE *pnote = &g_note;
+
+    if (STRUCT_OFFSET(pnote, 0x260, int) >= 2)
+        return;
+
+    if (STRUCT_OFFSET(pnote, 0x26c, int) != 0)
+        return;
+
+    if (SetVagUnpaused())
+        return;
+
+    if (g_wipe.wipes == WIPES_WipingOut)
+        return;
+
+    if (pdialog == g_pdialogPlaying)
+        return;
+
+    DIALOGS dialogs = DIALOGS_Triggered;
+
+    if (*STRUCT_OFFSET(pdialog, 0x304, int *) != 0) // pdialog->pfPlayed
+    {
+        if (STRUCT_OFFSET(pdialog, 0x2d0, DIALOGK) != DIALOGK_Confront) // pdialog->dialogk
+        {
+            dialogs = DIALOGS_UnableToCall;
+        }
+        else
+        {
+            dialogs = STRUCT_OFFSET(pdialog, 0x2d4, DIALOGS); // pdialog->dialogs
+        }
+    }
+    else
+    {
+        int cpfEquivalence = STRUCT_OFFSET(pdialog, 0x310, int); // pdialog->cpfEquivalence
+
+        if (cpfEquivalence > 0)
+        {
+            for (int i = 0; i < cpfEquivalence; i++)
+            {
+                if (*STRUCT_OFFSET_INDEX(pdialog, 0x314, int *, i) != 0)
+                // pdialog->cpfEquivalenceArray[i]
+                {
+                    dialogs = DIALOGS_UnableToCall;
+                    break;
+                }
+            }
+        }
+    }
+
+    SetDialogDialogs(pdialog, dialogs);
+}
 
 void UntriggerDialog(DIALOG *pdialog)
 {
@@ -78,3 +132,4 @@ void UntriggerDialog(DIALOG *pdialog)
         SetDialogDialogs(pdialog, DIALOGS_Enabled);
     }
 }
+
