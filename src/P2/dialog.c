@@ -3,6 +3,9 @@
 #include <screen.h>
 #include <wipe.h>
 #include <sound.h>
+#include <ui.h>
+
+extern BLOT g_binoc;
 
 void InitDialog(DIALOG *pdialog)
 {
@@ -69,7 +72,19 @@ INCLUDE_ASM("asm/nonmatchings/P2/dialog", FUN_001516c0);
 
 INCLUDE_ASM("asm/nonmatchings/P2/dialog", HandleDialogEvents__FP6DIALOG);
 
-INCLUDE_ASM("asm/nonmatchings/P2/dialog", FUN_00151860);
+void FUN_00151860(DIALOG *pdialog, BLOT *pblot)
+{
+    if (pblot)
+    {
+        ((void (*)(BLOT *, DIALOG *))STRUCT_OFFSET(pblot->pvtblot, 0x158, void *))(pblot, pdialog);
+    }
+    else
+    {
+        BLOT *pbinoc = &g_binoc;
+        STRUCT_OFFSET(pbinoc, 0x324, DIALOG *) = pdialog;
+        PushUiActiveBlot(&g_ui, pbinoc);
+    }
+}
 
 void TriggerDialog(DIALOG *pdialog)
 {
