@@ -43,15 +43,25 @@ Once you have a function selected, you can start matching it using either **Objd
 
 [Objdiff](https://github.com/encounter/objdiff), is a tool for showing the diff between a symbol in two object files. It is faster and more convenient then Decomp.me since it is included in the project, and doesn't require uploading anything to a website.
 
-1. Reconfigure the project using `python3 configure.py --objects`. This will generate the object files and the `objdiff.json` config file, but it won't build the final elf or run the checksum.
-2. From the project root, run `./tools/objdiff/objdiff-cli diff --project . -u P2/objname FunctionName`.
-    * Replace `objname` with the name of the object file the function is in.
+1. Place your new function under the `INCLUDE_ASM` macro of the function you want to match wrapped in `#ifdef SKIP_ASM` like so:
+
+   ```cpp
+   INCLUDE_ASM("asm/nonmatchings/P2/difficulty", OnDifficultyGameLoad__FP10DIFFICULTY);
+   #ifdef SKIP_ASM
+   void OnDifficultyGameLoad(DIFFICULTY *pdifficulty)
+   {
+      ...
+   }
+   #endif
+   ```
+2. From the project root, run `./scripts/diff.sh FunctionName [ObjectName]`.
     * Replace `FunctionName` with the **mangled name** of the function you want to match.
+    * Optionally, provide `ObjectName` using the name of the object file (without extension) if you know which file contains the function.
 3. Edit the source code until the function matches. The CURRENT assembly will update every time you save the file.
 
-**Example:** To match `OnDifficultyGameLoad` defined in `difficulty.c`, run this command:
+**Example:** To match `OnDifficultyGameLoad` defined in `P2/difficulty.c`, run this command:
 ```bash
-./tools/objdiff/objdiff-cli diff --project . -u P2/difficulty OnDifficultyGameLoad__FP10DIFFICULTY
+./scripts/diff.sh OnDifficultyGameLoad__FP10DIFFICULTY P2/difficulty
 ```
 
 ### Decomp.me
@@ -81,7 +91,7 @@ Once the function matches 100%, follow these steps to integrate it into the proj
 The project should build and match. Here are some common troubleshooting tips:
 * `undefined reference error` usually means the entry in the symbol_addrs.txt is wrong. Make sure the function name is mangled in symbol_addrs.txt and unmangled in the source code, and the mangled version matches the signature of the function. Also ensure that the address is correct in symbol_addrs.txt.
 * `checksum failed` means the compiled elf with your added code doesn't match the original. If it matches on decomp.me but not in the project, it might be an issue with the compiler, so open an issue on GitHub or let someone know on Discord.
-* `ninja: no work to do` in objdiff likely means the name of the function is wrong in your objdiff command and/or in symbol_addrs.txt. Make sure you are using the correct mangled name of the function in both places.
+* `ninja: no work to do` in diff.sh likely means the name of the function is wrong in your command and/or in symbol_addrs.txt. Make sure you are using the correct mangled name of the function in both places.
 
 <!--### CodeMatcher
 
