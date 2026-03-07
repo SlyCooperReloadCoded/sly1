@@ -9,28 +9,25 @@ INCLUDE_ASM("asm/nonmatchings/P2/find", MatchSwObject__FP2LOiiiT0iPiPP2LOT6);
 
 INCLUDE_ASM("asm/nonmatchings/P2/find", CploFindSwObjects__FP2SWi3OIDP2LOiPP2LO);
 
-LO *PloFindSwObject(SW *psw, int grffso, OID oid, LO *ploContext)
+LO *PloFindSwObject(SW *psw, GRFFSO grffso, OID oid, LO *ploContext)
 {
-    LO *aplo[4];
-    aplo[0] = 0;
-    CploFindSwObjects(psw, FSO_ReturnActualCount | grffso, oid, ploContext, 1, aplo);
-    return aplo[0];
+    LO *aplo = NULL;
+    CploFindSwObjects(psw, grffso | FSO_ReturnActualCount, oid, ploContext, 1, &aplo);
+    return aplo;
 }
 
 LO *PloFindSwNearest(SW *psw, OID oid, LO *ploContext)
 {
-    LO *aplo[4];
-    aplo[0] = 0;
-    CploFindSwObjects(psw, FSO_ReturnActualCount | FSO_FindNearest, oid, ploContext, 1, aplo);
-    return aplo[0];
+    LO *aplo = NULL;
+    CploFindSwObjects(psw, FSO_ReturnActualCount | FSO_FindNearest, oid, ploContext, 1, &aplo);
+    return aplo;
 }
 
 LO *PloFindSwChild(SW *psw, OID oid, ALO *paloAncestor)
 {
-    LO *aplo[4];
-    aplo[0] = 0;
-    CploFindSwObjects(psw, FSO_ReturnActualCount | FSO_FindChild, oid, paloAncestor, 1, aplo);
-    return aplo[0];
+    LO *aplo = NULL;
+    CploFindSwObjects(psw, FSO_ReturnActualCount | FSO_FindChild, oid, paloAncestor, 1, &aplo);
+    return aplo;
 }
 
 int FIsCidDerivedFrom(CID cid, CID cidAncestor)
@@ -51,14 +48,18 @@ int FIsCidDerivedFrom(CID cid, CID cidAncestor)
 
 INCLUDE_ASM("asm/nonmatchings/P2/find", CploFindSwObjectsByClass__FP2SWi3CIDP2LOiPP2LO);
 
-INCLUDE_ASM("asm/nonmatchings/P2/find", PloFindSwObjectByClass__FP2SWi3CIDP2LO);
+LO *PloFindSwObjectByClass(SW *psw, GRFFSO grffso, CID cid, LO *ploContext)
+{
+    LO *aplo = NULL;
+    CploFindSwObjectsByClass(psw, grffso | FSO_ReturnActualCount, cid, ploContext, 1, &aplo);
+    return aplo;
+}
 
 ALO *PaloFindLoCommonParent(LO *plo, LO *ploOther)
 {
-    ALO *current;
     while (plo)
     {
-        current = (ALO *)ploOther;
+        ALO *current = (ALO *)ploOther;
         while (current)
         {
             if (plo == current)

@@ -354,6 +354,7 @@ INSTRUCTION_PART = r"(\b(bne|bnel|beq|beql|bnez|bnezl|beqzl|bgez|bgezl|bgtz|bgtz
 OPCODE_PATTERN = re.compile(f"{COMMENT_PART}  {INSTRUCTION_PART}")
 
 PROBLEMATIC_FUNCS = {
+    "RefOpForEach__FiP4CRefP6CFrame",             # P2/splice/bif
     "PredictAsegEffect__FP4ASEGffP3ALOT3iP6VECTORP7MATRIX3T6T6", # P2/aseg
     "ProjectBlipgTransform__FP5BLIPGfi",                         # P2/blip
     "ExplodeExplsExplso__FP5EXPLSP6EXPLSO",                      # P2/emitter
@@ -373,7 +374,6 @@ PROBLEMATIC_FUNCS = {
     "PwarpFromOid__F3OIDT0",                                     # P2/xform
     "TriggerWarp__FP4WARP"                                       # P2/xform
 }
-
 
 def replace_instructions_with_opcodes(asm_folder: Path) -> None:
     """
