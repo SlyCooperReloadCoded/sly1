@@ -53,21 +53,36 @@ New contributors are welcome to make a pull request! If you would like to help b
 
 ## ⚡ Quickstart
 
-You can quickly setup the project on Linux (or WSL) using the quickstart script. Follow these three steps get started.
+You can quickly setup the project on Debian-based systems such as Ubuntu (or WSL) using the quickstart script. Follow these three steps to get started:
 
-### 1. Clone the repo and run quickstart.sh
+> **NOTE:** You can follow along on other distros by using the [Distrobox Guide](./docs/DISTROBOX.md) to set up a Debian container.
 
-Copy and run the following block of commands. It may ask for your password to install dependencies.
+### 1. Clone the repo
 
 ```bash
-git clone https://github.com/theonlyzac/sly1 && \
-cd sly1 && \
-./scripts/quickstart.sh
+git clone https://github.com/theonlyzac/sly1
+cd sly1
 ```
 
-### 2. Extract the executable from your disc
+### 2. Run quickstart
 
-Copy the file `SCUS_971.98` from your Sly 1 game disc to the `disc` directory of the project. It is needed to build.
+Run the `quickstart.sh` script in the `scripts` directory. It may ask for your password to install dependencies.
+
+You have two options to automatically extract your original game executable:
+
+- <b>Method 1:</b> Copy the NTSC-U Sly 1 game ISO to the `disc` directory and then run:
+
+  ```bash
+  ./scripts/quickstart.sh
+  ```
+
+- <b>Method 2:</b> Specify a path to the ISO:
+
+  ```bash
+  ./scripts/quickstart.sh /path/to/GameBackup.iso
+  ```
+
+Otherwise, just copy the `SCUS_971.98` file from your game disc to the `disc` directory manually.
 
 ### 3. Build the project
 
@@ -75,10 +90,9 @@ Copy the file `SCUS_971.98` from your Sly 1 game disc to the `disc` directory of
 ./scripts/build.sh
 ```
 
-If it works, you will see this:
+If the build succeeds, you will see this:
 
 ```
-[XXX/XXX] sha1sum config/checksum.sha1
 out/SCUS_971.98: OK
 ```
 
@@ -87,6 +101,8 @@ If you have any issues, or you prefer to set up the project manually, follow the
 ## ⚙️ Manual Setup
 
 The project can be built on Linux (or Windows using WSL). Follow the instructions below to set up the build environment.
+
+> **Note:** These instructions assume a Debian-based system such as Ubuntu. For other distributions, adapt the package manager commands and package names accordingly.
 
 ### 1. Clone the repository
 
@@ -103,10 +119,10 @@ To build the project, you will need to extract the original ELF file from your o
 
 ### 3. Setup Python environment
 
-If you don't have Python 3.9 or higher, install it:
+Install Python 3.9 or higher, pip and venv:
 
 ```bash
-sudo apt-get install python3 python3-pip
+sudo apt install python3 python3-pip python3-venv
 ```
 
 Create a Python environment for the project:
@@ -129,18 +145,20 @@ pip3 install -U -r requirements.txt
 
 ### 4. Setup build environment
 
-Setup wine:
+Install 32 bit MIPS assembler and Wine:
 
 ```bash
 sudo dpkg --add-architecture i386
-sudo apt-get update
-sudo apt-get install wine32
+sudo apt update
+sudo apt install binutils-mips-linux-gnu wine32
 ```
 
-Install the MIPS assembler:
+> **Note:** For a lighter and faster alternative to Wine, download [`wibo-i686`](https://github.com/decompals/wibo/releases/) to the `tools` directory.
+
+Install Ninja build system:
 
 ```bash
-sudo apt-get install binutils-mips-linux-gnu
+sudo apt install ninja-build
 ```
 
 Setup the compiler using the provided script:
@@ -148,20 +166,6 @@ Setup the compiler using the provided script:
 ```bash
 ./scripts/setup_prodg_linux.sh
 ```
-
-<!--#### Windows
-
-*Prerequisites: [Chocolatey](https://chocolatey.org/install)*
-
-1. Install 7zip:
-```powershell
-choco install 7zip
-```
-
-2. Setup build environment:
-```powershell
-.\scripts\setup_prodg_windows.bat
-```-->
 
 ### 5. Configure and build the project
 
@@ -187,30 +191,41 @@ Running the compiled executable requires [PCSX2 2.0](https://pcsx2.net/). You mu
 
 Once you have those, and you have built the executable `SCUS_971.98`, you can run it using one of three methods:
 
-### Method 1: Boot from PCSX2 GUI (Recommended)
+### Method 1: Autorun script
+
+The `run.sh` script in the `scripts` directory will run the last successful build in the PCSX2 emulator. It will automatically detect PCSX2 installed via package manager, Flatpak, AppImage, or XDG Desktop entries in that order and use the first ISO found in the `disc` directory to load assets.
+
+Optionally, you can specify what ISO file to use:
+
+```bash
+./scripts/run.sh /path/to/GameBackup.iso
+```
+
+To detect the PCSX2 AppImage, it must be placed in the `tools` directory, or be "Installed" via an AppImage manager utility.
+
+### Method 2: Run from PCSX2 CLI
+
+To boot the elf in PCSX2 from the command line, use the following command:
+
+```bash
+pcsx2 -elf "./out/SCUS_971.98" "/path/to/GameBackup.iso"
+```
+
+* Replace `pcsx2` with the path to your PCSX2 executable if not found automatically:
+  * <b>AppImage:</b> Use the path to the `.appimage` file.
+  * <b>Flatpak:</b> Grant PCSX2 access to your home directory with `flatpak override --user net.pcsx2.PCSX2 --filesystem=home` or a specific directory using `--filesystem=/path/to/files`. Then use `flatpak run net.pcsx2.PCSX2` as the executable. Relative paths to the ELF and ISO files will not work, only full system paths.
+  * <b>Windows:</b> Use the path to `pcsx2.exe`.
+* The `-elf` parameter specifies the path to the `SCUS_971.98` you built from this project. Replace the example path if necessary. The emulator will use this ELF to boot the game.
+* The last argument is the path to your game ISO. Replace the example path with the path to a backup of your own game disc. This is where the emulator will load assets from.
+
+### Method 3: Run from PCSX2 GUI
 
 1. In your PCSX2 games folder, make an alias (Linux) or symbolic link (Windows) called `SCUS_971.98.elf`, which points to the `out/SCUS_971.98` file built by this project.
     * Note: The alias/symlink must point to `out/SCUS_971.98`, not `out/SCUS_971.98.elf`.
 2. The alias/symlink will be recognized as a game in PCSX2. Right click on it, then click `Properties... > Disc Path > Browse` and select the ISO of your game backup.
 3. Click "Close" and boot the game as normal.
 
-You only have make the alias/symlink once, and it will update every time you build the project.
-
-### Method 2: Run PCSX2 from command line
-
-To boot the elf in PCSX2 from the command line, use the following command:
-
-```bash
-pcsx2.exe -elf "C:/.../sly1/out/SCUS_971.98" "C:/.../GameBackup.iso"
-```
-
-* Replace `pcsx2.exe` with the path to your PCSX2 v2.0 executable (it will be an `.appimage` file on Linux or `.exe` file on Windows).
-* The `-elf` parameter specifies the path to the `SCUS_971.98` you built from this project. Replace `...` with the path to this project on your computer. The emulator will use this ELF to boot the game.
-* The last argument is the path to your game ISO. Replace `...` with the path to a backup of your own game disc. This is where the emulator will load assets from.
-
-### Method 3: Autorun script
-
-The `run.sh` script in the `scripts` dir will automatically rebuild the executable and run it in the PCSX2 emulator. To use it, you must first edit the script to set the `PCSX2_PATH` and `ISO_PATH` variables to the correct paths on your system.
+You only have to make the alias/symlink once, and it will update every time you build the project.
 
 ## 📁 Project Structure
 

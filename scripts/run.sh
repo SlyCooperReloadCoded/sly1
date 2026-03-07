@@ -1,68 +1,100 @@
 #!/bin/bash
-
-# ##############################################################################
-# Set these paths to point to your PCSX2 1.7 executable and your copy of the game
-PCSX2_PATH=""
-ISO_PATH=""
-# ##############################################################################
-ELF_PATH="out/SCUS_971.98"
-OPTONS="-fastboot -nogui"
-
-# Expand aliases
-shopt -s expand_aliases
-source ~/.bash_aliases > /dev/null
-
-# Exit on error
 set -e
 
-# Print commands as they're run (for debugging)
-#set -o xtrace
+PROJECT_DIR="$(dirname "$0")/.."
+ELF="$PROJECT_DIR/out/SCUS_971.98"
 
-# Function to print an error message and exit
-die() {
-	echo "run.sh: error: $@"
-	exit 1
+# Parse Arguments
+if [[ $# -gt 1 ]]; then
+    echo "Usage: $0 [/path/to/game.iso]" >&2
+    exit 1
+fi
+
+if [[ $# -eq 1 ]]; then
+    ISO="$1"
+else # Find any ISO in disc directory
+    ISO=$(find "$PROJECT_DIR/disc" -maxdepth 1 -type f -iname "*.iso" -print -quit 2>/dev/null)
+    if [[ -z "$ISO" ]]; then
+        echo "Error: No ISO found in $PROJECT_DIR/disc" >&2
+        exit 1
+    fi
+    echo "Using ISO: $(basename "$ISO")"
+fi
+
+# Verify Files
+if [[ ! -f "$ISO" ]]; then
+    echo "Error: ISO not found: $ISO" >&2
+    exit 1
+fi
+
+if [[ ! -f "$ELF" ]]; then
+    echo "Error: ELF not found: $ELF" >&2
+    echo "Build the project first with: ./configure.py && ninja" >&2
+    exit 1
+fi
+
+# Resolve full paths for sandboxed environments
+ISO="$(realpath "$ISO")"
+ELF="$(realpath "$ELF")"
+
+find_pcsx2() {
+    # Check system PATH
+    if command -v pcsx2 &>/dev/null; then
+        printf "pcsx2"
+        return 0
+    fi
+
+    # Check flatpak
+    if command -v flatpak &>/dev/null && flatpak list --app 2>/dev/null | grep -q "net.pcsx2.PCSX2"; then
+        printf "flatpak run net.pcsx2.PCSX2"
+        return 0
+    fi
+
+    # Check for AppImage in tools directory
+    local appimage=$(find "$PROJECT_DIR/tools" -maxdepth 1 -type f -iname "*pcsx2*.appimage" -executable -print -quit 2>/dev/null)
+    if [[ -n "$appimage" ]]; then
+        printf '%q' "$appimage"
+        return 0
+    fi
+
+    # Check XDG Desktop entries
+    local desktop_file=$(find ~/.local/share/applications /usr/share/applications /usr/local/share/applications \
+        -maxdepth 1 -type f -iname "*pcsx2*.desktop" -print -quit 2>/dev/null)
+    if [[ -n "$desktop_file" ]]; then
+        # Extract executable path, stripping env vars and desktop file arguments
+        local exec_line=$(grep -m1 "^Exec=" "$desktop_file" | \
+            sed 's/^Exec=//' | \
+            sed 's/^env //' | \
+            sed 's/[A-Z_][A-Z0-9_]*=[^ ]* *//g' | \
+            sed 's/ %.*//' | \
+            awk '{print $1}')
+        printf '%q' "$exec_line"
+        return 0
+    fi
+
+    return 1
 }
 
-# Error if PCSX2 path is empty
-if [ -z "$PCSX2_PATH" ]; then
-    die PCSX2 path is empty, please edit the paths in 'scripts/run.sh'
+PCSX2=$(find_pcsx2)
+
+if [[ -z "$PCSX2" ]]; then
+    echo "Error: PCSX2 not found. Install it via:" >&2
+    echo "  - System package manager (pcsx2)" >&2
+    echo "  - Flatpak: flatpak install net.pcsx2.PCSX2" >&2
+    echo "  - Download AppImage to $PROJECT_DIR/tools/" >&2
     exit 1
 fi
 
-# Warn if ISO path is empty
-if [ -z "$ISO_PATH" ]; then
-    echo "Warning: ISO path is empty, please edit the paths in 'scripts/run.sh'"
-# Error if ISO path is not valid
-elif [ -f "$ISO_PATH" ]; then
-    die Game ISO not found at $ISO_PATH
-    exit 1
+run_verbose() {
+    ( PS4=''; set -x; "$@" )
+}
+
+# Grant Flatpak Permissions
+if [[ "$PCSX2" == "flatpak run"* ]]; then
+    run_verbose flatpak override --user net.pcsx2.PCSX2 \
+        --filesystem="$ISO":ro \
+        --filesystem="$ELF":ro
 fi
 
-# Error if PCSX2 is not valid
-#if [ -f "$PCSX2_PATH" ]; then
-#    die PCSX2 executable not found at $PCSX2_PATH
-#    exit 1
-#fi
-
-# Show error message if PCSX2 is not executable
-#if [ -x "$PCSX2_PATH" ]; then
-#    die PCSX2 executable is not executable
-#    exit 1
-#fi
-
-# Switch to the project root directory
-pushd "$(dirname "$0")/.." > /dev/null
-
-# Build the game
-echo Compiling ELF...
-#python3 configure.py --clean
-ninja
-
-# Run the game
-echo Booting ELF in PCSX2...
-"$PCSX2_PATH" -elf $ELF_PATH $OPTIONS -- $ISO_PATH
-
-# Switch back to the original directory
-popd > /dev/null
-echo Done.
+# Launch PCSX2
+run_verbose $PCSX2 -elf "$ELF" -fastboot -nogui -- "$ISO"

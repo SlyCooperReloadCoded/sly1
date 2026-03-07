@@ -20,9 +20,19 @@ There is an equivalent script for Windows, but the assembler does not work on Wi
 
 Runs a clean reconfigure (deletes build files and splits the binary), then builds the project. Will warn you if `disc/SCUS_971.98` is not present.
 
+### diff.sh
+
+Compares a decompiled function against the original using objdiff. Takes a function name as a required argument and an optional object name.
+
 ### run.sh
 
-Runs the project in an emulator. Before using, you must edit the script to point to your PCSX2 installation, and the path to your mounted game disc (or backup copy). The script will boot them emulator using the compiled elf, and load the assets from your game disc.
+Runs the last successful build in an emulator. Before using, you must install PCSX2, build the project, and either place an ISO in the `disc` directory or specify one as an argument. The script will boot the emulator using the compiled elf, and load the assets from the provided ISO.
+
+PCSX2 will be auto detected in this order:
+* System PATH
+* Flatpak
+* AppImage in the `tools` directory with "pcsx2" in the file name
+* XDG Desktop entry with "pcsx2" in the file name
 
 ### checks.sh
 
