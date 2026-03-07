@@ -1,4 +1,5 @@
 #include <font.h>
+#include <memory.h>
 
 void StartupFont()
 {
@@ -11,7 +12,19 @@ INCLUDE_ASM("asm/nonmatchings/P2/font", FUN_0015c1c0);
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", FUN_0015c200);
 
-INCLUDE_ASM("asm/nonmatchings/P2/font", CopyTo__5CFontP5CFont);
+void CFont::CopyTo(CFont *pfontDest)
+{
+    pfontDest->m_dxCharUnscaled = this->m_dxCharUnscaled;
+    pfontDest->m_dxSpaceUnscaled = this->m_dxSpaceUnscaled;
+    pfontDest->m_dyUnscaled = this->m_dyUnscaled;
+    pfontDest->m_rxScale = this->m_rxScale;
+    pfontDest->m_ryScale = this->m_ryScale;
+    pfontDest->m_csfr = this->m_csfr;
+    CopyAb(&pfontDest->m_asfr, &this->m_asfr, this->m_csfr * 8);
+    pfontDest->m_fGstest = this->m_fGstest;
+    pfontDest->m_gstest = this->m_gstest;
+    pfontDest->m_z = this->m_z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", SetupDraw__5CFontP8CTextBoxP4GIFS);
 
@@ -61,9 +74,20 @@ INCLUDE_ASM("asm/nonmatchings/P2/font", PglyffFromCh__8CFontBrxc);
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", __9CRichTextPcP5CFont);
 
-INCLUDE_ASM("asm/nonmatchings/P2/font", Reset__9CRichText);
+void CRichText::Reset()
+{
+    this->m_pchCur = this->m_achz;
+    this->m_pfontCur = this->m_pfontBase;
+    this->m_rgbaSet = this->m_rgbaBase;
+    this->m_rgbaCur = this->m_rgbaSet;
+    this->m_unknown = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/P2/font", SetBaseColor__9CRichTextG4RGBA);
+void CRichText::SetBaseColor(RGBA *rgba)
+{
+    this->m_rgbaBase = *rgba;
+    this->m_rgbaCur = this->m_rgbaBase;
+}
 
 INCLUDE_ASM("asm/nonmatchings/P2/font", ChNext__9CRichText);
 

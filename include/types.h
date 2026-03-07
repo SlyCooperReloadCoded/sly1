@@ -31,6 +31,9 @@ typedef ushort  undefined2;
 typedef uint    undefined4;
 typedef ulong   undefined8;
 
+// 128-bit quad-word type for lq/sq instructions
+typedef unsigned long long qword __attribute__((mode(TI)));
+
 // Misc
 typedef uchar byte;
 typedef union QW;

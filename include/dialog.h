@@ -150,6 +150,8 @@ int FPauseDialog(DIALOG *pdialog);
 
 void HandleDialogEvents(DIALOG *pdialog);
 
+void FUN_00151860(DIALOG *pdialog, BLOT *pblot);
+
 void TriggerDialog(DIALOG *pdialog);
 
 void UntriggerDialog(DIALOG *pdialog);

@@ -18,6 +18,10 @@ struct SFR
 
 class CFont
 {
+  public:
+    void CopyTo(CFont *pfontDest);
+
+  protected:
     int m_dxCharUnscaled;
     int m_dxSpaceUnscaled;
     int m_dyUnscaled;
@@ -31,7 +35,34 @@ class CFont
     float m_ryScale;
 };
 
+class CFontBrx : public CFont
+{
+  private:
+    undefined1 m_padding[0x33];
+};
+
 extern CFont *g_pfont;
+
+class CRichText
+{
+  public:
+    CRichText(char *achz, CFont *pfont);
+    int Cch();
+    void Reset();
+    void SetBaseColor(RGBA *rgba);
+
+  private:
+    char *m_achz;
+    char *m_pchCur;
+    CFont *m_pfontCur;
+    CFont *m_pfontBase;
+    CFontBrx m_fontOther;
+    undefined4 m_unknown; // todo: figure out what this is
+    RGBA m_rgbaCur;
+    RGBA m_rgbaSet;
+    RGBA m_rgbaBase;
+    RGBA m_rgbaOther;
+};
 
 void StartupFont();
 

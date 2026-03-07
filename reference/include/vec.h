@@ -52,18 +52,6 @@ struct CONSTR
 };
 
 /**
- * @brief Unknown, needs more research
-*/
-struct CLQ
-{
-    float g0;
-    float g1;
-    float g2;
-    float gUnused;
-    float u4ag[1];
-};
-
-/**
  * @brief Calculates the pan and tilt of a vector
  *
  * @param pvec Pointer to the vector

@@ -30,7 +30,7 @@ INCLUDE_ASM("asm/nonmatchings/P2/sound", FContinuousSound__F5SFXID);
 
 INCLUDE_ASM("asm/nonmatchings/P2/sound", FUN_001BE5D8);
 
-INCLUDE_ASM("asm/nonmatchings/P2/sound", SetVagUnpaused__FUiUl);
+INCLUDE_ASM("asm/nonmatchings/P2/sound", SetVagUnpaused__Fv);
 
 INCLUDE_ASM("asm/nonmatchings/P2/sound", PreloadVag__FPc2FK);
 

@@ -8,8 +8,26 @@
 
 #include "common.h"
 #include <screen.h>
+#include <util.h>
 
 struct ALO;
+
+/**
+ * @brief Binocular Edge Info (?)
+ * 
+ * @note Used for binocular outline rendering
+ */
+struct BEI
+{
+    /* 0x00 */ CLQ clq;             // Quadratic curve parameters
+    /* 0x10 */ float cseg;          // Total number of segments
+    /* 0x14 */ float csegNotchHalf; // Half the number of segments in the notch
+    /* 0x18 */ int isegNotchFirst;  // First segment index of the notch
+    /* 0x1c */ int isegNotchMid;    // Middle segment index of the notch
+    /* 0x20 */ int isegNotchLast;   // Last segment index of the notch
+    /* 0x24 */ float gNotchEdge;    // Y value at the notch edges
+    /* 0x28 */ float gNotchCenter;  // Y value at the notch center
+};
 
 struct BINOC : public BLOT
 {
@@ -25,6 +43,43 @@ struct BINOC : public BLOT
     undefined4 unk4;
     float uCompassBarOffset;
 };
+
+/**
+ * @brief Initializes a BEI struct for binocular outline rendering.
+ *
+ * @details Sets up the quadratic curve parameters and calculates segment indices for the
+ *          notch region in the binocular outline. The notch is positioned at the midpoint
+ *          of the curve for UI elements like the compass.
+ *
+ * @param pbei Pointer to the BEI struct to initialize.
+ * @param pclq Pointer to the quadratic curve (CLQ) defining the outline shape.
+ * @param duWidth Width of the notch.
+ * @param dgHeight Vertical offset for the notch center.
+ * @param cseg Total number of segments to divide the curve into.
+ */
+void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg);
+
+/**
+ * @brief Evaluates the binocular edge curve at a given segment.
+ *
+ * @details Returns the Y-coordinate for the outline at segment index iseg. For segments
+ *          outside the notch region, evaluates the quadratic curve directly. Within the
+ *          notch, performs linear interpolation between edge and center values to create
+ *          a V shaped cutout.
+ *
+ * @param pbei Pointer to the BEI struct containing curve and notch parameters.
+ * @param iseg Segment index along the outline.
+ * @return Y-coordinate value for the outline at this segment.
+ */
+float GEvaluateBei(BEI *pbei, int iseg);
+
+/**
+ * @brief Checks if the binocular text reveal animation is complete.
+ *
+ * @param pbinoc Pointer to BINOC instance.
+ * @return true if the text animation is complete, false otherwise.
+ */
+bool FDoneBinocAchz(BINOC *pbinoc);
 
 void SetBinocLookat(BINOC *binoc, ALO *paloLookat);
 

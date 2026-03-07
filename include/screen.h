@@ -61,7 +61,7 @@ struct BLOT
         VTTOTALS *pvttotals;
     };
     CFont *pfont;
-    undefined1 achzDraw[512];
+    char achzDraw[512];
     RGBA rgba;
     float rFontScale;
     CTextEdge *pte;
@@ -122,7 +122,7 @@ struct CTR : public BLOT
     int *pnTotal;
     float dgDisplayMax;
     float uRemain;
-    void *pfnsmack; // should be a function pointer
+    void (*pfnsmack)(void *);
     void *pv;
 };
 

@@ -12,14 +12,52 @@
 #include <sm.h>
 
 /**
- * @brief Unknown.
+ * @brief Constant Linear Quadratic.
  *
- * @todo Figure out what this is.
+ * @note Quadratic curve representation
  */
 struct CLQ
 {
-	float u, v, w, x;
+    union
+    {
+        struct
+        {
+            float g0, g1, g2, gUnused;
+        };
+        float ag[4];
+    };
 };
+
+/**
+ * @brief Evaluates a quadratic curve at parameter x.
+ *
+ * @details Computes the quadratic equation: g0 + x*g1 + x²*g2
+ *          Uses Horner's method for efficient evaluation: g0 + x*(g1 + x*g2)
+ *          This reduces multiplications from 3 to 2 compared to the expanded form.
+ *
+ * @param pclq Pointer to the quadratic curve
+ * @param x Parameter value
+ * @return Evaluated curve value at x
+ */
+static inline float GEvaluateClq(CLQ *pclq, float x)
+{
+    return pclq->g0 + x * (pclq->g1 + x * pclq->g2);
+}
+
+/**
+ * @brief Linear interpolation between two values.
+ *
+ * @details Returns (1-t)*a + t*b, smoothly blending from a (at t=0) to b (at t=1).
+ *
+ * @param a Starting value
+ * @param b Ending value
+ * @param t Interpolation parameter (typically 0.0-1.0)
+ * @return Interpolated value between a and b
+ */
+static inline float GLerp(float a, float b, float t)
+{
+    return (1.0f - t) * a + t * b;
+}
 
 /**
  * @brief Limits for a float.

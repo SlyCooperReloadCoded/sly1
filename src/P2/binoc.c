@@ -1,9 +1,70 @@
 #include <binoc.h>
 #include <alo.h>
+#include <clock.h>
+#include <font.h>
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", InitBei);
+void InitBei(BEI *pbei, CLQ *pclq, float duWidth, float dgHeight, int cseg)
+{
+    // Copy CLQ
+    *(qword *)&pbei->clq = *(qword *)pclq;
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", GEvaluateBei);
+    pbei->cseg = cseg;
+
+    // Calculate segment count of half the notch
+    float duSegWidth = 1.0f / cseg;
+    float csegNotchWidth = duWidth / duSegWidth;
+    int csegNotchHalf = (int)csegNotchWidth >> 1; // Simplifies to duWidth * cseg / 2
+
+    pbei->csegNotchHalf = csegNotchHalf;
+
+    // Calculate notch segment indices
+    pbei->isegNotchMid = cseg / 2;
+    pbei->isegNotchFirst = pbei->isegNotchMid - csegNotchHalf;
+    pbei->isegNotchLast = pbei->isegNotchMid + csegNotchHalf;
+
+    // Evaluate curve at notch edges and center
+    pbei->gNotchEdge = GEvaluateClq(pclq, pbei->isegNotchFirst / pbei->cseg);
+    pbei->gNotchCenter = GEvaluateClq(pclq, 0.5f) + dgHeight;
+}
+
+float GEvaluateBei(BEI *pbei, int iseg)
+{
+    // A more idiomatic structure would check if inside the notch first
+    // and use the CLQ evaluation as the default return value.
+
+    // Outside notch region
+    if (iseg < pbei->isegNotchFirst || iseg > pbei->isegNotchLast)
+    {
+        // Evaluate quadratic curve
+        float t = iseg / pbei->cseg;
+        return GEvaluateClq(&pbei->clq, t);
+    }
+
+    // Notch edges
+    if (iseg == pbei->isegNotchFirst || iseg == pbei->isegNotchLast)
+    {
+        // Return edge height
+        return pbei->gNotchEdge;
+    }
+
+    // Left side of notch
+    if (iseg < pbei->isegNotchMid)
+    {
+        // Interpolate between edge and center
+        float t = (iseg - pbei->isegNotchFirst) / pbei->csegNotchHalf;
+        return GLerp(pbei->gNotchEdge, pbei->gNotchCenter, t);
+    }
+
+    // Right side of notch
+    if (iseg > pbei->isegNotchMid)
+    {
+        // Interpolate between center and edge
+        float t = (iseg - pbei->isegNotchMid) / pbei->csegNotchHalf;
+        return GLerp(pbei->gNotchCenter, pbei->gNotchEdge, t);
+    }
+
+    return pbei->gNotchCenter;
+}
 
 void InitBinoc(BINOC *binoc, BLOTK blotk)
 {
@@ -73,7 +134,21 @@ INCLUDE_ASM("asm/nonmatchings/P2/binoc", FUN_001363d0);
 
 INCLUDE_ASM("asm/nonmatchings/P2/binoc", SetBinocAchzDraw);
 
-INCLUDE_ASM("asm/nonmatchings/P2/binoc", FDoneBinocAchz);
+bool FDoneBinocAchz(BINOC *pbinoc)
+{
+    if (pbinoc->achzDraw[0] == '\0')
+    {
+        return true;
+    }
+
+    CRichText rt(pbinoc->achzDraw, pbinoc->pfont);
+    int cchTotal = rt.Cch();
+
+    float tAchzDraw = g_clock.t - STRUCT_OFFSET(pbinoc, 0x268, float); // pbinoc->tAchzSet
+    int cchDrawn = (int)(tAchzDraw * STRUCT_OFFSET(pbinoc, 0x2F0, float)); // pbinoc->svch
+
+    return cchDrawn >= cchTotal;
+}
 
 void SetBinocLookat(BINOC *binoc, ALO *paloLookat)
 {
